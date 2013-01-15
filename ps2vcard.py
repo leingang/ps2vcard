@@ -173,11 +173,14 @@ for key in students:
     # student info
 	card.add('title').value = "Student"
 	card.add('org').value = org
-	photo_fh=open(student['photo'],'rb')
-	card.add('photo') 
-	card.photo.value = photo_fh.read()
-	card.photo.encoding_param = "b" 
-	card.photo.type_param = "JPEG" 
+	try:
+		photo_fh=open(student['photo'],'rb')
+		card.add('photo') 
+		card.photo.value = photo_fh.read()
+		card.photo.encoding_param = "b" 
+		card.photo.type_param = "JPEG" 
+	except KeyError:
+		pass
 	# course (use address book's "Related Names" fields)
 	item = 'item1' 
 	card.add(item + '.X-ABLABEL').value="course"
