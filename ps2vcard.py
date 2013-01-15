@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+"""
+Process a roster downloaded from Albert and generate vCards
+
+To create the source file:
+
+  * login to Albert, choose a course, and select "class roster"
+  * open the roster frame in its own tab
+  * select "view photos in list"
+  * select "view all"
+  * in web browser, save as "complete web page" or something similar, 
+    especially if you want photos
+  
+Then run this script on that file.
+"""
 
 from HTMLParser import HTMLParser
 from htmlentitydefs import entitydefs
@@ -116,7 +130,7 @@ class AlbertHTMLParser(HTMLParser,object):
 		self.feed(data)
 		return (self.course_data,self.student_data)
 
-argparser = argparse.ArgumentParser()
+argparser = argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawTextHelpFormatter)
 argparser.add_argument('--verbose',help='be verbose',
                     action='store_const',const=logging.INFO,dest='debug_level',
                     default=logging.WARNING)
