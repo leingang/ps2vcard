@@ -151,7 +151,10 @@ logging.basicConfig(level=args.debug_level)
 parser=AlbertHTMLParser()
 (course,students)=parser.parse(args.file)
 # logging.debug('students: %s',repr(students))
+
+# course info
 # logging.debug('course: %s',repr(course))
+(term,session,org,level) = course['description'].split(' | ')
 
 for key in students:
 	student = students[key]
@@ -168,8 +171,8 @@ for key in students:
 	card.email.value=student['email']
 	card.email.type_param='INTERNET'
     # student info
-	card.add('title').value="Student"
-	card.add('org').value=["New York University"]
+	card.add('title').value = "Student"
+	card.add('org').value = org
 	photo_fh=open(student['photo'],'rb')
 	card.add('photo') 
 	card.photo.value = photo_fh.read()
@@ -178,7 +181,7 @@ for key in students:
 	# course (use address book's "Related Names" fields)
 	item = 'item1' 
 	card.add(item + '.X-ABLABEL').value="course"
-	card.add(item + '.X-ABRELATEDNAMES').value=course['code']
+	card.add(item + '.X-ABRELATEDNAMES').value=course['code'] + ", " + term
 	if args.bprint:
 		card.prettyPrint()
 	if args.save:
