@@ -5,13 +5,18 @@ Process a roster downloaded from Albert and generate vCards
 To create the source file:
 
   * login to Albert, choose a course, and select "class roster"
-  * open the roster frame in its own tab
   * select "view photos in list"
   * select "view all"
-  * in web browser, save as "complete web page" or something similar, 
-    especially if you want photos
+  * save this page, including the frames and photos.  In Chrome, use
+    the "Webpage, complete" option when saving to do this.
+  * change to the directory and locate the roster file.  It will probably
+    be called "SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.html"
   
-Then run this script on that file.
+Then run this script on that file.  You won't get any vCards saved without 
+the --save option, though.
+
+Then you can import the cards into your address book.
+
 """
 
 from HTMLParser import HTMLParser
