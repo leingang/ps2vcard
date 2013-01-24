@@ -2,6 +2,10 @@
 """
 Process a roster downloaded from Albert and generate vCards
 
+This script requires the vobject library <http://vobject.skyhouseconsulting.com/>
+to create and serialize vCards. To get it, try `easy_install vobject` from the command line,
+or go to the web page referenced above and follow the installation instructions.
+
 To create the source file:
 
   * login to Albert, choose a course, and select "class roster"
@@ -9,8 +13,8 @@ To create the source file:
   * select "view all"
   * save this page, including the frames and photos.  In Chrome, use
     the "Webpage, complete" option when saving to do this.
-  * change to the directory and locate the roster file.  It will probably
-    be called "SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.html"
+  * change to the created directory (it will likely end in `_files`) and locate the roster file.
+    It will probably be called "SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.html"
   
 Then run this script on that file.  You won't get any vCards saved without 
 the --save option, though.
