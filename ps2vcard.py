@@ -162,8 +162,12 @@ parser=AlbertHTMLParser()
 # logging.debug('students: %s',repr(students))
 
 # course info
-# logging.debug('course: %s',repr(course))
+logging.debug('course: %s',repr(course))
 (term,session,org,level) = course['description'].split(' | ')
+logging.debug('term: %s',term)
+logging.debug('session: %s',session)
+logging.debug('org: %s',org)
+logging.debug('level: %s',level)
 
 for key in students:
 	student = students[key]
@@ -181,7 +185,7 @@ for key in students:
 	card.email.type_param='INTERNET'
     # student info
 	card.add('title').value = "Student"
-	card.add('org').value = org
+	card.add('org').value=[org,student['progplan'].replace('\n','')]
 	try:
 		photo_fh=open(student['photo'],'rb')
 		card.add('photo') 
