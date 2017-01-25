@@ -10,119 +10,235 @@ or go to the web page referenced above and follow the installation instructions.
 
 import base64
 import click
-from HTMLParser import HTMLParser
-from htmlentitydefs import entitydefs
+from collections import defaultdict
+from html.parser import HTMLParser
+from html.entities import entitydefs
 import logging
 import re
+from transitions import Machine,logger
+from transitions.core import MachineError
 import vobject
 
-class AlbertHTMLParser(HTMLParser,object):
-	student_keys_dict={
-		'CLASS_ROSTER_VW_EMPLID'     : 'id',
-		'SCC_PRFPRIMNMVW_NAME'       : 'name',
-		'DERIVED_SSSMAIL_EMAIL_ADDR' : 'email',
-		'SCC_PREF_PHN_VW_PHONE'      : 'phone',
-		'PROGPLAN'                   : 'progplan',
-		'PROGPLAN1'                  : 'level',
-		'PSXLATITEM_XLATLONGNAME'    : 'status'
-	}
-	course_keys_dict={
-		'DERIVED_SSR_FC_SSR_CLASSNAME_LONG' : 'code',
-		'DERIVED_SSR_FC_SSS_PAGE_KEYDESCR2' : 'description',
-		'DERIVED_SSR_FC_DESCR254'           : 'name',
-		'MTG_INSTR$0'                       : 'instructor',
-		'MTG_SCHED$0'                       : 'schedule',
-		'MTG_LOC$0'                         : 'room',
-		'MTG_DATE$0'                        : 'dates'
-	}
+class AlbertHTMLParser(HTMLParser,Machine):
+    student_keys_dict={
+    'CLASS_ROSTER_VW_EMPLID'     : 'id',
+    'SCC_PRFPRIMNMVW_NAME'       : 'name',
+    'DERIVED_SSSMAIL_EMAIL_ADDR' : 'email',
+    'SCC_PREF_PHN_VW_PHONE'      : 'phone',
+    'PROGPLAN'                   : 'progplan',
+    'PROGPLAN1'                  : 'level',
+    'PSXLATITEM_XLATLONGNAME'    : 'status'
+    }
+    course_keys_dict={
+    'DERIVED_SSR_FC_SSR_CLASSNAME_LONG' : 'code',
+    'DERIVED_SSR_FC_SSS_PAGE_KEYDESCR2' : 'description',
+    'DERIVED_SSR_FC_DESCR254'           : 'name',
+    'MTG_INSTR$0'                       : 'instructor',
+    'MTG_SCHED$0'                       : 'schedule',
+    'MTG_LOC$0'                         : 'room',
+    'MTG_DATE$0'                        : 'dates'
+    }
+    photo_key='win0divEMPL_PHOTO_EMPLOYEE_PHOTO'
 
-	def __init__(self):
-		HTMLParser.__init__(self)
-		self.course_data={}
-		self.student_data={}
-		# parsing state variables
-		self.current_key=""
-		self.current_index=0
-		self.data=""
-		self.state='SEEKING_ID'
-		self.data_dest=''
+    def __init__(self):
+        self.course_data=defaultdict(dict)
+        self.student_records=defaultdict(dict)
+        HTMLParser.__init__(self)
+        # parsing state variables
+        self.current_key=""
+        self.current_index=0
+        self.data=""
+        self.data_dest=''
+        states=['seeking_key','seeking_student_data','seeking_course_data','seeking_student_image']
+        Machine.__init__(self,states=states,initial='seeking_key')
+        # The transition and callbacks below create a flow equivalent to this:
+        #
+        # If, while in the state 'seeking_key', a starttag (HTML `element`)
+        # is found,
+        #
+        #  1. `unpack_element` will store the elements data (tag name and attributes)
+        #     as machine properties, plus perform some pattern matching to test on.
+        #
+        #  2. The condition `found_course_key` will be checked.  If it fails,
+        #     abort and go on to the next transition.
+        #
+        #  3. If it succeeds, transition to state `seeking_course_data`.
+        #
+        #  4. But before making the transition, execute `handle_course_key`.
+        #     This stores a translation of the course key into something
+        #     human-readable, to become a property of the course.
+        #
+        #  5. After making the transition, execute `cleanup_unpack_element`
+        #     This just removes the properties instantiated by `unpack_element`
+        #
+        #  The actual transition function can't be overridden, but the callbacks
+        #  can, and they do all the work.
+        self.add_transition(
+            source='seeking_key',
+            trigger='machine_handle_attr',
+            prepare='unpack_element',
+            conditions='found_course_key',
+            before='handle_course_key',
+            dest='seeking_course_data',
+            after='cleanup_unpack_element')
+        self.add_transition(
+            source='seeking_key',
+            trigger='machine_handle_attr',
+            conditions='found_student_key',
+            before='handle_student_key',
+            dest='seeking_student_data',
+            after='cleanup_unpack_element')
+        self.add_transition(
+            source='seeking_key',
+            trigger='machine_handle_attr',
+            conditions='found_photo_key',
+            before='handle_photo_key',
+            dest='seeking_student_image',
+            after='cleanup_unpack_element')
+        self.add_transition(
+            source='seeking_student_image',
+            trigger='machine_handle_attr',
+            prepare='unpack_element',
+            conditions='found_img_src',
+            before='handle_img_src',
+            dest='seeking_key',
+            after='cleanup_unpack_element')
+        for source in ['seeking_course_data','seeking_student_data']:
+            self.add_transition(
+                source=source,
+                trigger='machine_handle_data',
+                before='buffer_data',
+                dest=source)
+            self.add_transition(
+                source=source,
+                trigger='machine_handle_entityref',
+                before='buffer_translated_entityref',
+                dest=source)
+        for subject in ['course','student']:
+            source='seeking_%s_data' % subject
+            self.add_transition(
+                source=source,
+                trigger='machine_handle_endtag',
+                before='capture_%s_data' % subject,
+                after='reset_buffers',
+                dest='seeking_key')
+            # once we find a key, we can ignore attributes until we capture the data
+            #
+            # (Another way to do this might be to insert a state found_course_key, and a
+            # trigger finish_handling_attrs that sends found_course_key to seeking_course_data,
+            # but seeking_key back to itself.  Then handle_attrs can take found_course_key
+            # back to itself as well.)
+            self.add_transition(
+                source=source,
+                trigger='machine_handle_attr',
+                dest=source)
+        # Ignore character data, entity references, or end tags until we find a key.
+        #
+        # There is a ignore_invalid_transitions flag that can be set,
+        # but Explicit is Better than Implicit.
+        for trigger in ['machine_handle_data','machine_handle_entityref','machine_handle_endtag']:
+            self.add_transition(trigger,'seeking_key','seeking_key')
 
-	def handle_starttag(self,tag,attrs):
-		for attr in attrs:
-			(name,value) = attr
-			if name == 'id':
-				logging.debug("parsing id %s" % value)
-				match=re.match("([^$]*)\$(\d+)$",value)
-				if (value in self.course_keys_dict):
-					logging.debug("key %s is in course dictionary",value)
-					self.current_key=self.course_keys_dict[value]
-					self.state='SEEKING_DATA'
-					self.data_dest='COURSE'
-				elif match:
-					(key,index)=match.group(1,2)
-					logging.debug("key=%s",key)
-					if (key in self.student_keys_dict):
-						logging.debug("key %s is in student dictionary",key)
-						self.current_key=self.student_keys_dict[key]
-						self.current_index=int(index)
-						self.state='SEEKING_DATA'
-						self.data_dest='STUDENT'
-					elif key == 'win0divEMPL_PHOTO_EMPLOYEE_PHOTO':
-						self.current_index=int(index)
-						self.state='SEEKING_STUDENT_IMG'
-					else:
-						logging.debug("ignoring key %s",key)
-				else:
-					logging.debug("id doesn't match, moving on")
-		if (tag == 'img' and self.state=='SEEKING_STUDENT_IMG'):
-			for attr in attrs:
-				(name,value)=attr
-				if name=='src':
-					try:
-						self.student_data[self.current_index]
-					except KeyError:
-						self.student_data[self.current_index] = {}
-					self.student_data[self.current_index]['photo'] = value
-			self.current_index=0
-			self.state='SEEKING_ID'
+    def unpack_element(self,tag,attr):
+        self.tag_name=tag
+        self.attr_name,self.attr_value = attr
+        self.attr_value_match=re.match("([^$]*)\$(\d+)$",self.attr_value)
 
-	def handle_data(self,data):
-		if self.state == 'SEEKING_DATA':
-			self.data += data
+    def cleanup_unpack_element(self,tag,attr):
+        del self.tag_name, self.attr_name, self.attr_value, self.attr_value_match
 
-	def handle_charref(self,name):
-		logging.debug("character ref: %s",name)
+    def found_course_key(self,tag,attr):
+        return (self.attr_name == 'id') and (self.attr_value in self.course_keys_dict)
 
-	def handle_entityref(self,name):
-		# logging.debug("entity ref: %s",name)
-		if (self.state == 'SEEKING_DATA'):
-			if (name in entitydefs):
-				self.data += entitydefs[name]
+    def handle_course_key(self,tag,attr):
+        logging.debug("parsing id %s" % self.attr_value)
+        self.current_key=self.course_keys_dict[self.attr_value]
 
-	def handle_endtag(self,tag):
-		if self.state == 'SEEKING_DATA':
-			# we're done
-			if self.data_dest=='STUDENT':
-				logging.debug("self.current_key=%s, self.current_index=%d",self.current_key,self.current_index)
-				try:
-					self.student_data[self.current_index]
-				except KeyError:
-					self.student_data[self.current_index] = {}
-				self.student_data[self.current_index][self.current_key] = self.data
-			elif self.data_dest=='COURSE':
-				self.course_data[self.current_key] = self.data
-			else:
-				logging.error("Unknown data destination %s",self.data_dest)
-			self.current_index=0
-			self.current_key=""
-			self.data=""
-			self.data_dest=''
-			self.state='SEEKING_ID'
+    def found_student_key(self,tag,attr):
+        return (self.attr_name == 'id'
+            and self.attr_value_match
+            and self.attr_value_match.group(1) in self.student_keys_dict)
 
-	def parse(self,file):
-		data = open(file, 'r').read()
-		self.feed(data)
-		return (self.course_data,self.student_data)
+    def handle_student_key(self,tag,attr):
+        self.current_key = self.student_keys_dict[self.attr_value_match.group(1)]
+        self.current_index = int(self.attr_value_match.group(2))
+
+    def found_photo_key(self,tag,attr):
+        return (self.attr_name == 'id'
+            and self.attr_value_match
+            and self.attr_value_match.group(1) == self.photo_key)
+
+    def handle_photo_key(self,tag,attr):
+        self.current_index = int(self.attr_value_match.group(2))
+
+    def found_img_src(self,tag,attr):
+        return (self.tag_name == 'img' and self.attr_name == 'src')
+
+    def handle_img_src(self,tag,attr):
+        self.student_records[self.current_index]['photo'] = self.attr_value
+
+    # This is the HTMLParser method.
+    # But all the work is done by the Machine method.
+    def handle_starttag(self,tag,attrs):
+        log=logging.getLogger('AlbertHTMLParser.handle_starttag')
+        for attr in attrs:
+            try:
+                self.machine_handle_attr(tag,attr)
+            except MachineError:
+                log.error('current_key: %s' % self.current_key)
+                log.error("tag: %s" % tag)
+                log.error("attrs: %s" % attrs)
+                raise
+
+    def handle_data(self,data):
+        self.machine_handle_data(data)
+
+    def buffer_data(self,data):
+        self.data += data
+
+    def handle_charref(self,name):
+        logging.debug("character ref: %s",name)
+
+    def handle_entityref(self,name):
+        # logging.debug("entity ref: %s",name)
+        self.machine_handle_entityref(name)
+        # if (self.state == 'SEEKING_DATA'):
+        #     if (name in entitydefs):
+        #         self.data += entitydefs[name]
+
+    def buffer_translated_entityref(self,name):
+        # possible KeyError if name is not in entitydefs
+        # Either put into a conditional before the transition
+        # or handle the exception properly
+        self.data += entitydefs[name]
+
+    def handle_endtag(self,tag):
+        self.machine_handle_endtag()
+
+    def capture_course_data(self):
+        self.course_data[self.current_key] = self.data
+
+    def capture_student_data(self):
+        self.student_records[self.current_index][self.current_key] = self.data
+
+    def reset_buffers(self):
+        # better to del-ete them?
+        self.current_index=0
+        self.current_key=""
+        self.data=""
+
+    def parse(self,file):
+        """parse an Albert HTML file for course and student information
+
+        Return a tuple `(course,students)`, where `course` is a dictionary
+        of course (i.e., section) properties, and `students` is a list of
+        dictionaries of student properties.
+        """
+        # TODO: consider returning a pandas.DataFrame
+        with open(file,'r') as f:
+            data = f.read()
+            self.feed(data)
+        return (self.course_data,self.student_records)
 
 def student_to_vcard(student,org,course,term):
     """convert a single student record to a vCard object."""
@@ -142,15 +258,14 @@ def student_to_vcard(student,org,course,term):
     card.add('title').value = "Student"
     card.add('org').value = org
     try:
-        photo_fh=open(student['photo'],'rb')
         card.add('photo')
-        encoded_bytes = base64.b64encode(photo_fh.read())
-        card.photo.value = encoded_bytes
-        card.photo.encoding_param = "BASE64"
+        with open(student['photo'],'rb') as f:
+            card.photo.value = f.read()
+        card.photo.encoding_param = "b"
         card.photo.type_param = "JPEG"
-        photo_fh.close()
     except KeyError:
-    	pass
+        # no photo
+        pass
     # course (use address book's "Related Names" fields)
     item = 'item1'
     card.add(item + '.X-ABLABEL').value="course"
@@ -201,7 +316,7 @@ def convert_all(infile,verbose,debug,save,pprint):
     Then you can import the cards into your address book.
 
     """
-    loglevel = logging.DEBUG if debug else (logging.VERBOSE if verbose else logging.WARNING)
+    loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     parser=AlbertHTMLParser()
     (course,students)=parser.parse(infile)
@@ -209,6 +324,7 @@ def convert_all(infile,verbose,debug,save,pprint):
 
     # course info
     # logging.debug('course: %s',repr(course))
+    # TODO: fix this so that they are also `course` keys.
     (term,session,org,level) = course['description'].split(' | ')
 
     for key in students:
