@@ -49,7 +49,10 @@ class AlbertHTMLParser(HTMLParser,Machine):
         self.current_index=0
         self.data=""
         self.data_dest=''
-        states=['seeking_key','seeking_student_data','seeking_course_data','seeking_student_image']
+        states=['seeking_key',
+            'found_course_key','found_student_key',
+            'seeking_student_data','seeking_course_data',
+            'seeking_student_image']
         Machine.__init__(self,states=states,initial='seeking_key')
         # The transition and callbacks below create a flow equivalent to this:
         #
@@ -59,10 +62,10 @@ class AlbertHTMLParser(HTMLParser,Machine):
         #  1. `unpack_element` will store the elements data (tag name and attributes)
         #     as machine properties, plus perform some pattern matching to test on.
         #
-        #  2. The condition `found_course_key` will be checked.  If it fails,
+        #  2. The condition `attr_is_course_key` will be checked.  If it fails,
         #     abort and go on to the next transition.
         #
-        #  3. If it succeeds, transition to state `seeking_course_data`.
+        #  3. If it succeeds, transition to state `found_course_key`.
         #
         #  4. But before making the transition, execute `handle_course_key`.
         #     This stores a translation of the course key into something
@@ -71,22 +74,31 @@ class AlbertHTMLParser(HTMLParser,Machine):
         #  5. After making the transition, execute `cleanup_unpack_element`
         #     This just removes the properties instantiated by `unpack_element`
         #
+        #  6. Once in state `found_course_key`, all other attrivutes will
+        #     impotently transition from that state back to itself.
+        #     This avoids an error that was caused by multiple attributes
+        #     (`id` and `name`) having the same key as their attribute value.
+        #
+        #  7. Once all the attributes in a start tag are proceesed, the transition
+        #     `finish_handling_attrs` will move from state `found_course_key`
+        #     to `seeking_course_data`
+        #
         #  The actual transition function can't be overridden, but the callbacks
         #  can, and they do all the work.
         self.add_transition(
             source='seeking_key',
             trigger='machine_handle_attr',
             prepare='unpack_element',
-            conditions='found_course_key',
+            conditions='attr_is_course_key',
             before='handle_course_key',
-            dest='seeking_course_data',
+            dest='found_course_key',
             after='cleanup_unpack_element')
         self.add_transition(
             source='seeking_key',
             trigger='machine_handle_attr',
-            conditions='found_student_key',
+            conditions='attr_is_student_key',
             before='handle_student_key',
-            dest='seeking_student_data',
+            dest='found_student_key',
             after='cleanup_unpack_element')
         self.add_transition(
             source='seeking_key',
@@ -122,22 +134,26 @@ class AlbertHTMLParser(HTMLParser,Machine):
                 before='capture_%s_data' % subject,
                 after='reset_buffers',
                 dest='seeking_key')
-            # once we find a key, we can ignore attributes until we capture the data
-            #
-            # (Another way to do this might be to insert a state found_course_key, and a
-            # trigger finish_handling_attrs that sends found_course_key to seeking_course_data,
-            # but seeking_key back to itself.  Then handle_attrs can take found_course_key
-            # back to itself as well.)
+            source='found_%s_key' % subject
+            dest='seeking_%s_data' % subject
             self.add_transition(
                 source=source,
                 trigger='machine_handle_attr',
-                dest=source)
+                dest=source
+            )
+            self.add_transition(
+                source=source,
+                trigger='finish_handling_attrs',
+                dest=dest
+            )
         # Ignore character data, entity references, or end tags until we find a key.
         #
         # There is a ignore_invalid_transitions flag that can be set,
         # but Explicit is Better than Implicit.
-        for trigger in ['machine_handle_data','machine_handle_entityref','machine_handle_endtag']:
+        for trigger in ['machine_handle_data','machine_handle_entityref','machine_handle_endtag',
+            'finish_handling_attrs']:
             self.add_transition(trigger,'seeking_key','seeking_key')
+        self.add_transition('finish_handling_attrs','seeking_student_image','seeking_student_image')
 
     def unpack_element(self,tag,attr):
         self.tag_name=tag
@@ -147,14 +163,14 @@ class AlbertHTMLParser(HTMLParser,Machine):
     def cleanup_unpack_element(self,tag,attr):
         del self.tag_name, self.attr_name, self.attr_value, self.attr_value_match
 
-    def found_course_key(self,tag,attr):
+    def attr_is_course_key(self,tag,attr):
         return (self.attr_name == 'id') and (self.attr_value in self.course_keys_dict)
 
     def handle_course_key(self,tag,attr):
         logging.debug("parsing id %s" % self.attr_value)
         self.current_key=self.course_keys_dict[self.attr_value]
 
-    def found_student_key(self,tag,attr):
+    def attr_is_student_key(self,tag,attr):
         return (self.attr_name == 'id'
             and self.attr_value_match
             and self.attr_value_match.group(1) in self.student_keys_dict)
@@ -189,6 +205,7 @@ class AlbertHTMLParser(HTMLParser,Machine):
                 log.error("tag: %s" % tag)
                 log.error("attrs: %s" % attrs)
                 raise
+        self.finish_handling_attrs()
 
     def handle_data(self,data):
         self.machine_handle_data(data)
@@ -281,7 +298,7 @@ def write_vcard(card,filename=None):
     #filename=student['name'].replace(',','_').replace(' ','_') + '.vcf'
     if filename is None:
         filename="%s.vcf" % card.fn.value.replace(' ','_')
-    logging.info("Saving %s",filename)
+    logging.getLogger('write_vcard').info("Saving %s",filename)
     with open(filename,'w') as f:
         f.write(card.serialize())
 
