@@ -134,7 +134,7 @@ class AlbertClassRosterParser(HTMLParser,Machine):
             trigger='machine_handle_attr',
             prepare='unpack_element',
             conditions='attr_is_course_key',
-            before='handle_course_key',
+            before=['store_key','handle_course_key'],
             dest='found_course_key',
             after='cleanup_unpack_element')
         self.add_transition(
@@ -170,6 +170,14 @@ class AlbertClassRosterParser(HTMLParser,Machine):
                 trigger='machine_handle_entityref',
                 before='buffer_translated_entityref',
                 dest=source)
+        # one key needs some additional handling
+        self.add_transition(
+            source='seeking_course_data',
+            trigger='machine_handle_endtag',
+            conditions='key_is_course_description',
+            before=['capture_course_data','unpack_course_description'],
+            after='reset_buffers',
+            dest='seeking_key')
         for subject in ['course','student']:
             source='seeking_%s_data' % subject
             self.add_transition(
@@ -209,6 +217,9 @@ class AlbertClassRosterParser(HTMLParser,Machine):
 
     def attr_is_course_key(self,tag,attr):
         return (self.attr_name == 'id') and (self.attr_value in self.course_keys_dict)
+
+    def store_key(self,tag,attr):
+        self.albert_key=self.attr_value
 
     def handle_course_key(self,tag,attr):
         logging.debug("parsing id %s" % self.attr_value)
@@ -282,8 +293,27 @@ class AlbertClassRosterParser(HTMLParser,Machine):
     def capture_student_data(self):
         self.student_records[self.current_index][self.current_key] = self.data
 
+    def key_is_course_description(self):
+        return (self.albert_key in self.course_keys_dict
+            and self.course_keys_dict[self.albert_key] == 'description')
+
+    def unpack_course_description(self):
+        """Unpack the course description string.
+
+        The course description string looks like
+        "Spring 2017 | Regular Academic Session | New York University | Undergraduate"
+
+        """
+        (term,session,org,level) = self.course_data['description'].split(' | ')
+        self.course_data['term'] = term
+        self.course_data['session'] = session
+        self.course_data['org'] = org
+        self.course_data['level'] = level
+
+
     def reset_buffers(self):
         # better to del-ete them?
+        self.albert_key=None
         self.current_index=0
         self.current_key=""
         self.data=""
@@ -296,7 +326,6 @@ class AlbertClassRosterParser(HTMLParser,Machine):
         of course (i.e., section) properties, and `students` is a list of
         dictionaries of student properties.
         """
-        # TODO: consider returning a pandas.DataFrame
         with open(file,'r') as f:
             data = f.read()
             self.feed(data)
@@ -434,7 +463,7 @@ def convert_all(infile,verbose,debug,save,pprint):
 @click.option('--save',is_flag=True,default=False,help='save vCards')
 @click.option('--save-dir','save_dir',type=click.Path(),default=os.getcwd(),
     help='save vCards to this directory (default: current directory)')
-@click.option('--print','pprint',is_flag=True,default=True,
+@click.option('--print/--no-print','pprint',is_flag=True,default=True,
     help='pretty-print vCards to standard output')
 @click.argument('infile',metavar='FILE',type=click.Path(exists=True),default='Faculty Center.html')
 def convert_all_from_frameset(infile,verbose,debug,save,save_dir,pprint):
@@ -462,15 +491,13 @@ def convert_all_from_frameset(infile,verbose,debug,save,save_dir,pprint):
     Then you can import the cards into your address book.
     """
     loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
-    if save_dir:
-        save = True
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_all_from_frameset')
     parser=AlbertClassRosterFramesetParser()
     (course,students)=parser.parse(infile)
     # logging.debug('students: %s',repr(students))
     # course info
-    # logging.debug('course: %s',repr(course))
+    logging.debug('course: %s',repr(course))
     # TODO: fix this so that they are also `course` keys.
     try:
         (term,session,org,level) = course['description'].split(' | ')
