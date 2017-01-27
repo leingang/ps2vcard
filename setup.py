@@ -9,6 +9,7 @@ setup(
     install_requires=['Click','vobject','transitions'],
     entry_points="""
         [console_scripts]
-        ps2vcard=ps2vcard:convert_all
+        ps2vcard-old=ps2vcard:convert_all
+        ps2vcard=ps2vcard:convert_all_from_frameset
     """
 )

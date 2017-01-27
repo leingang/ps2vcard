@@ -14,12 +14,56 @@ from collections import defaultdict
 from html.parser import HTMLParser
 from html.entities import entitydefs
 import logging
+import os
 import re
 from transitions import Machine,logger
 from transitions.core import MachineError
 import vobject
 
-class AlbertHTMLParser(HTMLParser,Machine):
+class AlbertClassRosterFramesetParser(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.roster_frame = None
+
+    def handle_starttag(self,tag,attrs):
+        log = logging.getLogger("AlbertClassRosterFramesetParser.starttag")
+        log.debug("tag: %s" % tag)
+        log.debug("attrs: %s" % attrs)
+        if self.roster_frame:
+            return
+        attr_dict={}
+        # must be a better way...
+        for (name,value) in attrs:
+            attr_dict[name] = value
+        log.debug("attr_dict: %s" % attr_dict)
+        if (tag == 'frame' and 'name' in attr_dict and attr_dict['name'] == 'TargetContent'):
+            self.roster_frame=attr_dict['src']
+            self.subparser = AlbertClassRosterParser()
+            self.subparser.base_dir=os.path.dirname(self.roster_frame)
+            self.subparser.parse(self.roster_frame)
+
+    def parse(self,infile):
+        """parse an Albert Class Roster frameset HTML file
+        for course and student information
+
+        First looks for the TargetContent frame, then parses that with
+        a AlbertClassRosterParser.
+
+        Return a tuple `(course,students)`, where `course` is a dictionary
+        of course (i.e., section) properties, and `students` is a list of
+        dictionaries of student properties.
+        """
+        log = logging.getLogger("AlbertClassRosterFramesetParser.parse")
+        log.debug('file: %s',infile)
+        with open(infile,'r') as f:
+            data = f.read()
+            # log.debug('data: %s',data)
+            self.feed(data)
+        return (self.subparser.course_data,self.subparser.student_records)
+
+
+
+class AlbertClassRosterParser(HTMLParser,Machine):
     student_keys_dict={
     'CLASS_ROSTER_VW_EMPLID'     : 'id',
     'SCC_PRFPRIMNMVW_NAME'       : 'name',
@@ -191,12 +235,12 @@ class AlbertHTMLParser(HTMLParser,Machine):
         return (self.tag_name == 'img' and self.attr_name == 'src')
 
     def handle_img_src(self,tag,attr):
-        self.student_records[self.current_index]['photo'] = self.attr_value
+        self.student_records[self.current_index]['photo'] = os.path.join(self.base_dir,self.attr_value)
 
     # This is the HTMLParser method.
     # But all the work is done by the Machine method.
     def handle_starttag(self,tag,attrs):
-        log=logging.getLogger('AlbertHTMLParser.handle_starttag')
+        log=logging.getLogger('AlbertClassRosterParser.handle_starttag')
         for attr in attrs:
             try:
                 self.machine_handle_attr(tag,attr)
@@ -245,7 +289,8 @@ class AlbertHTMLParser(HTMLParser,Machine):
         self.data=""
 
     def parse(self,file):
-        """parse an Albert HTML file for course and student information
+        """parse an Albert Class Roster frame HTML file
+        for course and student information
 
         Return a tuple `(course,students)`, where `course` is a dictionary
         of course (i.e., section) properties, and `students` is a list of
@@ -288,6 +333,37 @@ def student_to_vcard(student,org,course,term):
     card.add(item + '.X-ABLABEL').value="course"
     card.add(item + '.X-ABRELATEDNAMES').value=course['code'] + ", " + term
     return card
+
+class VcardWriter(object):
+    """Class to write a vCard to a file"""
+
+    def __init__(self,dirname=None):
+        if dirname is None:
+            dirname=os.getcwd()
+        self.dirname=dirname
+
+
+    def write(self,card,filename=None):
+        """write a vcard to a file.
+
+        If no `filename` is given, use the `card_file_name` method
+        """
+        if not os.path.exists(self.dirname):
+            os.mkdir(self.dirname)
+        if filename is None:
+            filename=self.card_file_name(card)
+        logging.getLogger('write_vcard').info("Saving %s",filename)
+        with open(os.path.join(self.dirname,filename),'w') as f:
+            f.write(card.serialize())
+
+    def card_file_name(self,card):
+        """construct a file name for a vCard.
+
+        This one returns a sanitized form of the full name plus `.vcf`
+        Warning: not guaranteed to be unique.
+        """
+        return "%s.vcf" % card.fn.value.replace(' ','_')
+
 
 def write_vcard(card,filename=None):
     """write a vcard to a file.
@@ -335,7 +411,7 @@ def convert_all(infile,verbose,debug,save,pprint):
     """
     loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
-    parser=AlbertHTMLParser()
+    parser=AlbertClassRosterParser()
     (course,students)=parser.parse(infile)
     # logging.debug('students: %s',repr(students))
 
@@ -351,3 +427,61 @@ def convert_all(infile,verbose,debug,save,pprint):
             card.prettyPrint()
         if save:
             write_vcard(card)
+
+@click.command()
+@click.option('--verbose',is_flag=True,default=False,help='be verbose')
+@click.option('--debug',is_flag=True,default=False,help='show debugging statements')
+@click.option('--save',is_flag=True,default=False,help='save vCards')
+@click.option('--save-dir','save_dir',type=click.Path(),default=os.getcwd(),
+    help='save vCards to this directory (default: current directory)')
+@click.option('--print','pprint',is_flag=True,default=True,
+    help='pretty-print vCards to standard output')
+@click.argument('infile',metavar='FILE',type=click.Path(exists=True),default='Faculty Center.html')
+def convert_all_from_frameset(infile,verbose,debug,save,save_dir,pprint):
+    """Process a roster downloaded from Albert and generate vCards
+
+    To create the source file:
+
+      * login to Albert, choose a course, and select "class roster"
+
+      * select "view photos in list"
+
+      * select "view all"
+
+      * save this page, including the frames and photos.  In Chrome, use
+        the "Webpage, complete" option when saving to do this.
+
+      * change to the download directory (it will likely end in `_files`)
+        and locate the HTML file.  It will probably be called `Faculty Center.html`
+        and have an accompanying directory `Faculty Center_files`.
+
+      * Run this script on that file.
+
+    To save vCards, use the --save option.
+
+    Then you can import the cards into your address book.
+    """
+    loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
+    if save_dir:
+        save = True
+    logging.basicConfig(level=loglevel)
+    log = logging.getLogger('convert_all_from_frameset')
+    parser=AlbertClassRosterFramesetParser()
+    (course,students)=parser.parse(infile)
+    # logging.debug('students: %s',repr(students))
+    # course info
+    # logging.debug('course: %s',repr(course))
+    # TODO: fix this so that they are also `course` keys.
+    try:
+        (term,session,org,level) = course['description'].split(' | ')
+    except AttributeError:
+        log.debug('course["description"]: %s', course['description'])
+        raise
+    writer=VcardWriter(dirname=save_dir)
+    for key in students:
+        student = students[key]
+        card=student_to_vcard(student,org,course,term)
+        if pprint:
+            card.prettyPrint()
+        if save:
+            writer.write(card)
