@@ -51,7 +51,7 @@ class AlbertClassRosterFramesetParser(HTMLParser):
 
         Return a tuple `(course,students)`, where `course` is a dictionary
         of course (i.e., section) properties, and `students` is a list of
-        dictionaries of student properties.
+        vCards.
         """
         log = logging.getLogger("AlbertClassRosterFramesetParser.parse")
         log.debug('file: %s',infile)
@@ -59,7 +59,7 @@ class AlbertClassRosterFramesetParser(HTMLParser):
             data = f.read()
             # log.debug('data: %s',data)
             self.feed(data)
-        return (self.subparser.course_data,self.subparser.student_records)
+        return (self.subparser.course_data,self.subparser.student_vcards)
 
 
 
@@ -329,39 +329,43 @@ class AlbertClassRosterParser(HTMLParser,Machine):
         with open(file,'r') as f:
             data = f.read()
             self.feed(data)
-        return (self.course_data,self.student_records)
+        self.student_vcards=[]
+        for (index,student) in self.student_records.items():
+            self.student_vcards.append(self.student_to_vcard(student,self.course_data))
+        return (self.course_data,self.student_vcards)
 
-def student_to_vcard(student,org,course,term):
-    """convert a single student record to a vCard object."""
-    card = vobject.vCard()
-    # first and last names
-    (family_name,given_names) = student['name'].split(',')
-    card.add('n')
-    card.n.value = vobject.vcard.Name(family=family_name,given=given_names)
-    # full name
-    card.add('fn')
-    card.fn.value="%s %s" % (given_names,family_name)
-    # email
-    card.add('email')
-    card.email.value=student['email']
-    card.email.type_param='INTERNET'
-    # student info
-    card.add('title').value = "Student"
-    card.add('org').value = org
-    try:
-        card.add('photo')
-        with open(student['photo'],'rb') as f:
-            card.photo.value = f.read()
-        card.photo.encoding_param = "b"
-        card.photo.type_param = "JPEG"
-    except KeyError:
-        # no photo
-        pass
-    # course (use address book's "Related Names" fields)
-    item = 'item1'
-    card.add(item + '.X-ABLABEL').value="course"
-    card.add(item + '.X-ABRELATEDNAMES').value=course['code'] + ", " + term
-    return card
+    def student_to_vcard(self,student,course):
+        """convert a single student record to a vCard object."""
+        card = vobject.vCard()
+        # first and last names
+        (family_name,given_names) = student['name'].split(',')
+        card.add('n')
+        card.n.value = vobject.vcard.Name(family=family_name,given=given_names)
+        # full name
+        card.add('fn')
+        card.fn.value="%s %s" % (given_names,family_name)
+        # email
+        card.add('email')
+        card.email.value=student['email']
+        card.email.type_param='INTERNET'
+        # student info
+        card.add('title').value = "Student"
+        card.add('org').value = course['org']
+        try:
+            card.add('photo')
+            with open(student['photo'],'rb') as f:
+                card.photo.value = f.read()
+            card.photo.encoding_param = "b"
+            card.photo.type_param = "JPEG"
+        except KeyError:
+            # no photo
+            pass
+        # course (use address book's "Related Names" fields)
+        item = 'item1'
+        card.add(item + '.X-ABLABEL').value="course"
+        card.add(item + '.X-ABRELATEDNAMES').value=course['code'] + ", " + course['term']
+        return card
+
 
 class VcardWriter(object):
     """Class to write a vCard to a file"""
@@ -443,19 +447,14 @@ def convert_all(infile,verbose,debug,save,pprint):
     parser=AlbertClassRosterParser()
     (course,students)=parser.parse(infile)
     # logging.debug('students: %s',repr(students))
-
-    # course info
-    # logging.debug('course: %s',repr(course))
-    # TODO: fix this so that they are also `course` keys.
-    (term,session,org,level) = course['description'].split(' | ')
-
-    for key in students:
-        student = students[key]
-        card=student_to_vcard(student,org,course,term)
+    logging.debug('course: %s',repr(course))
+    logging.debug('students: %s',repr(students))
+    writer=VcardWriter(dirname=save_dir)
+    for card in students:
         if pprint:
             card.prettyPrint()
         if save:
-            write_vcard(card)
+            writer.write(card)
 
 @click.command()
 @click.option('--verbose',is_flag=True,default=False,help='be verbose')
@@ -498,16 +497,9 @@ def convert_all_from_frameset(infile,verbose,debug,save,save_dir,pprint):
     # logging.debug('students: %s',repr(students))
     # course info
     logging.debug('course: %s',repr(course))
-    # TODO: fix this so that they are also `course` keys.
-    try:
-        (term,session,org,level) = course['description'].split(' | ')
-    except AttributeError:
-        log.debug('course["description"]: %s', course['description'])
-        raise
+    logging.debug('students: %s',repr(students))
     writer=VcardWriter(dirname=save_dir)
-    for key in students:
-        student = students[key]
-        card=student_to_vcard(student,org,course,term)
+    for card in students:
         if pprint:
             card.prettyPrint()
         if save:
