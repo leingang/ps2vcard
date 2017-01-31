@@ -422,6 +422,8 @@ def convert_all(infile,verbose,debug,save,pprint):
     """
     Process a roster downloaded from Albert and generate vCards
 
+    DEPRECATED.  Use the version that parses the frameset file first.
+
     To create the source file:
 
       * login to Albert, choose a course, and select "class roster"
@@ -446,7 +448,6 @@ def convert_all(infile,verbose,debug,save,pprint):
     logging.basicConfig(level=loglevel)
     parser=AlbertClassRosterParser()
     (course,students)=parser.parse(infile)
-    # logging.debug('students: %s',repr(students))
     logging.debug('course: %s',repr(course))
     logging.debug('students: %s',repr(students))
     writer=VcardWriter(dirname=save_dir)
@@ -504,3 +505,27 @@ def convert_all_from_frameset(infile,verbose,debug,save,save_dir,pprint):
             card.prettyPrint()
         if save:
             writer.write(card)
+
+
+@click.command()
+@click.option('--verbose',is_flag=True,default=False,help='be verbose')
+@click.option('--debug',is_flag=True,default=False,help='show debugging statements')
+@click.option('--save-dir','save_dir',type=click.Path(),default=os.getcwd(),
+    help='save images to this directory (default: current directory)')
+@click.argument('infile',metavar='FILE',type=click.Path(exists=True),default='Faculty Center.html')
+def convert_to_anki(infile,verbose,debug,save_dir):
+    """Process a roster downloaded from Albert and generate a set
+    of image files with student names.  These files can be imported to Anki
+    for making flashcards.
+    """
+    loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
+    logging.basicConfig(level=loglevel)
+    log = logging.getLogger('convert_to_anki')
+    parser = AlbertClassRosterFramesetParser()
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+    (course,students) = parser.parse(infile)
+    for card in students:
+        filename = os.path.join(save_dir,card.fn.value + '.jpg')
+        with open(filename,'wb') as f:
+            f.write(card.photo.value)
