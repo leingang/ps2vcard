@@ -10,12 +10,14 @@ or go to the web page referenced above and follow the installation instructions.
 
 import base64
 import click
+import csv
 from collections import defaultdict
 from html.parser import HTMLParser
 from html.entities import entitydefs
 import logging
 import os
 import re
+import sys
 from transitions import Machine,logger
 from transitions.core import MachineError
 import vobject
@@ -310,6 +312,13 @@ class AlbertClassRosterParser(HTMLParser,Machine):
         self.course_data['org'] = org
         self.course_data['level'] = level
 
+    def unpack_progplan(self,progplan):
+        """unpack the `progplan` string into program and progplan
+
+        Example: "UA-Coll of Arts & Sci - \n\nUndecided"
+        """
+        # TODO: how do docstrings work inside a class?
+        return progplan.split(' - \n\n')
 
     def reset_buffers(self):
         # better to del-ete them?
@@ -350,7 +359,13 @@ class AlbertClassRosterParser(HTMLParser,Machine):
         card.email.type_param='INTERNET'
         # student info
         card.add('title').value = "Student"
-        card.add('org').value = course['org']
+        # could be working around a bug, but a list is expected here to avoid
+        # ORG:N;e;w;Y;o;r;k;U; ... in the card.
+        # while we are at it, we will unpack progplan
+        # TODO: add to FSM
+        (student_program,student_plan) = self.unpack_progplan(student['progplan'])
+        card.add('org').value = [course['org'],student_program]
+        card.add('X-NYU-PROGPLAN').value = "%s - %s" % (student_program,student_plan)
         try:
             card.add('photo')
             with open(student['photo'],'rb') as f:
@@ -364,11 +379,14 @@ class AlbertClassRosterParser(HTMLParser,Machine):
         item = 'item1'
         card.add(item + '.X-ABLABEL').value="course"
         card.add(item + '.X-ABRELATEDNAMES').value=course['code'] + ", " + course['term']
+        # N Number.  Does this really need an `item2` extension?
+        card.add('X-NYU-NNUMBER').value="N" + student['id']
         return card
 
 
 class VcardWriter(object):
     """Class to write a vCard to a file"""
+    _name='VcardWriter'
 
     def __init__(self,dirname=None):
         if dirname is None:
@@ -385,7 +403,7 @@ class VcardWriter(object):
             os.mkdir(self.dirname)
         if filename is None:
             filename=self.card_file_name(card)
-        logging.getLogger('write_vcard').info("Saving %s",filename)
+        logging.getLogger(self._name + '.write').info("Saving %s",filename)
         with open(os.path.join(self.dirname,filename),'w') as f:
             f.write(card.serialize())
 
@@ -398,18 +416,41 @@ class VcardWriter(object):
         return "%s.vcf" % card.fn.value.replace(' ','_')
 
 
-def write_vcard(card,filename=None):
-    """write a vcard to a file.
-
-    If no `filename` is given, use a sanitized form of the full name, with
-    extension `.vcf`
+class AmcCsvWriter(csv.DictWriter):
+    """Class to write a list of students to a CSV file suitable for importing
+    into auto-multiple-choice
     """
-    #filename=student['name'].replace(',','_').replace(' ','_') + '.vcf'
-    if filename is None:
-        filename="%s.vcf" % card.fn.value.replace(' ','_')
-    logging.getLogger('write_vcard').info("Saving %s",filename)
-    with open(filename,'w') as f:
-        f.write(card.serialize())
+    fieldnames=[
+        'Campus ID', # N Number
+        'surname',
+        'name', # given names
+        'NetID',
+        'email', # NetID@nyu.edu
+        'id' # N Number with no N
+    ]
+
+    def __init__(self,csvfile,restval='', extrasaction='raise', dialect='excel', *args, **kwds):
+        # don't know how to pass the other keyword arguments...
+        super().__init__(csvfile,fieldnames=self.fieldnames)
+
+    def write(self,students):
+        self.writeheader()
+        for student in students:
+            (email_localpart,domain) = student.email.value.split('@')
+            try:
+                row={
+                    'Campus ID' : student.x_nyu_nnumber.value,
+                    'surname' : student.n.value.family,
+                    'name' : student.n.value.given,
+                    'NetID' : email_localpart,
+                    'email' : student.email.value,
+                    'id' : student.x_nyu_nnumber.value.replace('N','')
+                }
+            except:
+                # debugging
+                logging.error('student: %s', repr(student))
+                raise
+            self.writerow(row)
 
 # Here begins the script
 @click.command()
@@ -543,3 +584,20 @@ def convert_to_anki(infile,verbose,debug,save_dir):
                 f.write(card.photo.value)
             else:
                 log.warn('No photo found for student %s; skipping.' % card.fn.value)
+
+@click.command()
+@click.option('--verbose',is_flag=True,default=False,help='be verbose')
+@click.option('--debug',is_flag=True,default=False,help='show debugging statements')
+@click.option('--output','outfile',type=click.File('wb'),default=sys.stdout)
+@click.argument('infile',metavar='FILE',type=click.Path(exists=True),default='Faculty Center.html')
+def convert_to_amccsv(infile,verbose,debug,outfile):
+    """Process a roster downloaded from Albert and generate a CSV file suitable
+    for importing to auto-multiple-choice.
+    """
+    loglevel = logging.DEBUG if debug else (logging.INFO if verbose else logging.WARNING)
+    logging.basicConfig(level=loglevel)
+    log = logging.getLogger('convert_to_amccsv')
+    parser = AlbertClassRosterFramesetParser()
+    (course,students) = parser.parse(infile)
+    writer = AmcCsvWriter(outfile)
+    writer.write(students)

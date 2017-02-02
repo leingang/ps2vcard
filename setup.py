@@ -12,5 +12,6 @@ setup(
         ps2vcard-old=ps2vcard:convert_all
         ps2vcard=ps2vcard:convert_all_from_frameset
         ps2anki=ps2vcard:convert_to_anki
+        ps2amc=ps2vcard:convert_to_amccsv
     """
 )
