@@ -6,7 +6,7 @@ setup(
     name='ps2vcard',
     version='0.1',
     py_modules=['ps2vcard'],
-    install_requires=['Click','vobject','transitions'],
+    install_requires=['Click', 'vobject', 'transitions'],
     entry_points="""
         [console_scripts]
         ps2vcard-old=ps2vcard:convert_all
