@@ -382,7 +382,7 @@ class AlbertClassRosterParser(HTMLParser, Machine):
             student['progplan'])
         card.add('org').value = [course['org'], student_program]
         card.add('X-NYU-PROGPLAN').value =\
-            [student_program, student_plan].join(' - ')
+            ' - '.join([student_program, student_plan])
         try:
             card.add('photo')
             with open(student['photo'], 'rb') as f:
@@ -564,7 +564,7 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_all_from_frameset')
-    log.verbose('begin')
+    log.info('begin')
     parser = AlbertClassRosterFramesetParser()
     (course, students) = parser.parse(infile)
     # logging.debug('students: %s',repr(students))
@@ -577,7 +577,7 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
             card.prettyPrint()
         if save:
             writer.write(card)
-    log.verbose('end')
+    log.info('end')
 
 
 @click.command()
@@ -640,9 +640,9 @@ def convert_to_amccsv(infile, verbose, debug, outfile):
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_to_amccsv')
-    log.verbose('begin')
+    log.info('begin')
     parser = AlbertClassRosterFramesetParser()
     (course, students) = parser.parse(infile)
     writer = AmcCsvWriter(outfile)
     writer.write(students)
-    log.verbose('end')
+    log.info('end')
