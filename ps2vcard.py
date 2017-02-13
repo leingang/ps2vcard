@@ -453,15 +453,17 @@ class AmcCsvWriter(csv.DictWriter):
     def write(self, students):
         self.writeheader()
         for student in students:
-            (email_localpart, domain) = student.email.value.split('@')
+            (email_localpart, domain) = student['Email Address'].split('@')
+            (family_name,given_names) = student['Name'].split(',')
+
             try:
                 row = {
-                    'Campus ID': student.x_nyu_nnumber.value,
-                    'surname': student.n.value.family,
-                    'name': student.n.value.given,
+                    'Campus ID': student['Campus ID'],
+                    'surname': family_name,
+                    'name': given_names,
                     'NetID': email_localpart,
-                    'email': student.email.value,
-                    'id': student.x_nyu_nnumber.value.replace('N', '')
+                    'email': student['Email Address'],
+                    'id': student['Campus ID'].replace('N', '')
                 }
             except:
                 # debugging
@@ -629,12 +631,15 @@ def convert_to_anki(infile, verbose, debug, save_dir):
 @click.option('--verbose', is_flag=True, default=False, help='be verbose')
 @click.option('--debug', is_flag=True, default=False,
               help='show debugging statements')
-@click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout)
+@click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout,
+              metavar='FILE',help='write to FILE (default: stdout)'
+)
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
-                default='Faculty Center.html')
+                default='ps.csv')
 def convert_to_amccsv(infile, verbose, debug, outfile):
-    """Process a roster downloaded from Albert and generate a CSV file suitable
-    for importing to auto-multiple-choice.
+    """Process a CSV roster downloaded from Albert and generate a CSV file
+    suitable for importing to auto-multiple-choice.
+
     """
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
@@ -642,7 +647,8 @@ def convert_to_amccsv(infile, verbose, debug, outfile):
     log = logging.getLogger('convert_to_amccsv')
     log.info('begin')
     parser = AlbertClassRosterFramesetParser()
-    (course, students) = parser.parse(infile)
-    writer = AmcCsvWriter(outfile)
-    writer.write(students)
+    with open(infile) as f:
+        students=csv.DictReader(f)
+        writer = AmcCsvWriter(outfile)
+        writer.write(students)
     log.info('end')
