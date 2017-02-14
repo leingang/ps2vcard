@@ -22,15 +22,22 @@ from transitions import Machine, logger  # noqa: F401
 from transitions.core import MachineError
 import vobject
 
+def unpack_progplan(self, progplan):
+    """unpack a `progplan` string into program and plan.
 
-class AlbertClassRosterFramesetParser(HTMLParser):
+    >>> unpack_progplan("UA-Coll of Arts & Sci - \n\nUndecided")
+    ['UA-Coll of Arts & Sci','Undecided']
+    """
+    return progplan.split(' - \n\n')
+
+class AlbertRosterFramesetParser(HTMLParser):
 
     def __init__(self):
         HTMLParser.__init__(self)
         self.roster_frame = None
 
     def handle_starttag(self, tag, attrs):
-        log = logging.getLogger("AlbertClassRosterFramesetParser.starttag")
+        log = logging.getLogger("AlbertRosterFramesetParser.starttag")
         log.debug("tag: %s" % tag)
         log.debug("attrs: %s" % attrs)
         if self.roster_frame:
@@ -43,7 +50,7 @@ class AlbertClassRosterFramesetParser(HTMLParser):
         if (tag == 'frame' and 'name' in attr_dict and
                 attr_dict['name'] == 'TargetContent'):
             self.roster_frame = attr_dict['src']
-            self.subparser = AlbertClassRosterParser()
+            self.subparser = AlbertRosterHtmlParser()
             self.subparser.base_dir = os.path.dirname(self.roster_frame)
             self.subparser.parse(self.roster_frame)
 
@@ -52,13 +59,13 @@ class AlbertClassRosterFramesetParser(HTMLParser):
         for course and student information
 
         First looks for the TargetContent frame, then parses that with
-        a AlbertClassRosterParser.
+        a AlbertRosterHtmlParser.
 
         Return a tuple `(course,students)`, where `course` is a dictionary
         of course (i.e., section) properties, and `students` is a list of
         vCards.
         """
-        log = logging.getLogger("AlbertClassRosterFramesetParser.parse")
+        log = logging.getLogger("AlbertRosterFramesetParser.parse")
         log.debug('file: %s', infile)
         with open(infile, 'r') as f:
             data = f.read()
@@ -66,8 +73,7 @@ class AlbertClassRosterFramesetParser(HTMLParser):
             self.feed(data)
         return (self.subparser.course_data, self.subparser.student_vcards)
 
-
-class AlbertClassRosterParser(HTMLParser, Machine):
+class AlbertRosterHtmlParser(HTMLParser, Machine):
     student_keys_dict = {
         'CLASS_ROSTER_VW_EMPLID': 'id',
         'SCC_PRFPRIMNMVW_NAME': 'name',
@@ -265,7 +271,7 @@ class AlbertClassRosterParser(HTMLParser, Machine):
     # This is the HTMLParser method.
     # But all the work is done by the Machine method.
     def handle_starttag(self, tag, attrs):
-        log = logging.getLogger('AlbertClassRosterParser.handle_starttag')
+        log = logging.getLogger('AlbertRosterHtmlParser.handle_starttag')
         for attr in attrs:
             try:
                 self.machine_handle_attr(tag, attr)
@@ -325,14 +331,6 @@ class AlbertClassRosterParser(HTMLParser, Machine):
         self.course_data['org'] = org
         self.course_data['level'] = level
 
-    def unpack_progplan(self, progplan):
-        """unpack the `progplan` string into program and progplan
-
-        Example: "UA-Coll of Arts & Sci - \n\nUndecided"
-        """
-        # TODO: how do docstrings work inside a class?
-        return progplan.split(' - \n\n')
-
     def reset_buffers(self):
         # better to del-ete them?
         self.albert_key = None
@@ -378,8 +376,7 @@ class AlbertClassRosterParser(HTMLParser, Machine):
         # ORG:N;e;w;Y;o;r;k;U; ... in the card.
         # while we are at it, we will unpack progplan
         # TODO: add to FSM
-        (student_program, student_plan) = self.unpack_progplan(
-            student['progplan'])
+        (student_program, student_plan) = unpack_progplan(student['progplan'])
         card.add('org').value = [course['org'], student_program]
         card.add('X-NYU-PROGPLAN').value =\
             ' - '.join([student_program, student_plan])
@@ -397,8 +394,56 @@ class AlbertClassRosterParser(HTMLParser, Machine):
         card.add(item + '.X-ABLABEL').value = "course"
         card.add(item + '.X-ABRELATEDNAMES')\
             .value = course['code'] + ", " + course['term']
-        card.add('X-NYU-NNUMBER').value = "N" + student['id']
         return card
+
+class AlbertRosterCsvParser(object):
+    """Class to parse CSV files downloaded from Albert"""
+
+    def student_to_vcard(student,course):
+        """convert a single student dictionary to a vCard."""
+        card = vobject.vCard()
+        course['org'] = "New York University"
+        (family_name,given_names) = student['Name'].split(',')
+        card.add('n').value = vobject.vcard.Name(
+            family=family_name, given=given_names)
+        # full name
+        card.add('fn').value = "%s %s" % (given_names, family_name)
+        # email
+        card.add('email')
+        card.email.value = student['email']
+        card.email.type_param = 'INTERNET'
+        # student info
+        card.add('title').value = "Student"
+        (student_program, student_plan) = unpack_progplan(
+            student['Program and Plan'])
+        card.add('org').value = [course['org'], student_program]
+        card.add('X-NYU-PROGPLAN').value =\
+            ' - '.join([student_program, student_plan])
+        card.add('X-NYU-NNUMBER').value = student['Campus ID']
+        item = 'item1'
+        card.add(item + '.X-ABLABEL').value = "course"
+        card.add(item + '.X-ABRELATEDNAMES')\
+            .value = "%s %d - %03d" % (
+                student['Subject'],
+                int(student['Catalog']),
+                int(student['Section']))
+        return card
+
+    def parse(self,input_file):
+        """parse an Albert Class Roster frame CSV file
+        for course and student information
+
+        Return a tuple `(course,students)`, where `course` is a dictionary
+        of course (i.e., section) properties, and `students` is a list of
+        dictionaries of student properties.
+        """
+        with open(input_file) as f:
+            self.student_vcards = []
+            self.course_data = {}
+            for student in csv.DictReader(f):
+                self.student_vcards.append(
+                    self.student_to_vcard(student, self.course_data))
+        return (self.course_data, self.student_vcards)
 
 
 class VcardWriter(object):
@@ -471,9 +516,7 @@ class AmcCsvWriter(csv.DictWriter):
                 raise
             self.writerow(row)
 
-# Here begins the script
-
-
+# Here begin the scripts
 @click.command()
 @click.option('--verbose', is_flag=True, default=False, help='be verbose')
 @click.option('--debug', is_flag=True, default=False,
@@ -513,7 +556,7 @@ def convert_all(infile, verbose, debug, save, pprint):
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
-    parser = AlbertClassRosterParser()
+    parser = AlbertRosterHtmlParser()
     (course, students) = parser.parse(infile)
     logging.debug('course: %s', repr(course))
     logging.debug('students: %s', repr(students))
@@ -567,7 +610,7 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_all_from_frameset')
     log.info('begin')
-    parser = AlbertClassRosterFramesetParser()
+    parser = AlbertRosterFramesetParser()
     (course, students) = parser.parse(infile)
     # logging.debug('students: %s',repr(students))
     # course info
@@ -612,7 +655,7 @@ def convert_to_anki(infile, verbose, debug, save_dir):
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_to_anki')
-    parser = AlbertClassRosterFramesetParser()
+    parser = AlbertRosterFramesetParser()
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
     (course, students) = parser.parse(infile)
@@ -646,7 +689,7 @@ def convert_to_amccsv(infile, verbose, debug, outfile):
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_to_amccsv')
     log.info('begin')
-    parser = AlbertClassRosterFramesetParser()
+    parser = AlbertRosterFramesetParser()
     with open(infile) as f:
         students=csv.DictReader(f)
         writer = AmcCsvWriter(outfile)
