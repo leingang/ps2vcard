@@ -27,8 +27,12 @@ class TestVcardPhotoSerialize(unittest.TestCase):
             self.card.photo.value = f.read()
         self.card.photo.encoding_param = "b"
         self.card.photo.type_param = "PNG"
-        print(self.card.serialize())
-        # AttributeError: 'bytes' object has no attribute 'encode'
+        output = self.card.serialize()
+        # with open('felix.vcf','w') as f:
+        #     f.write(output)
+        with open('felix.vcf','r',newline='\r\n') as f:
+            expected_output=f.read()
+        self.assertEqual(output,expected_output)
 
 
 if __name__ == '__main__':

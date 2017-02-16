@@ -5,6 +5,13 @@ Convert Albert rosters to vCards
 
 see docstring in ps2vcard.py
 
+Requirements
+------------
+
+* vobject (version?)
+* jinja2 (2.9.5) is used for test generation
+
+
 Installation
 ------------
 
