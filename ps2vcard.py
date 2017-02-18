@@ -22,7 +22,7 @@ from transitions import Machine, logger  # noqa: F401
 from transitions.core import MachineError
 import vobject
 
-def unpack_progplan(self, progplan):
+def unpack_progplan(progplan):
     """unpack a `progplan` string into program and plan.
 
     >>> unpack_progplan("UA-Coll of Arts & Sci - \n\nUndecided")

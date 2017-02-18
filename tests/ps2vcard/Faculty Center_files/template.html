@@ -1,0 +1,1036 @@
+
+<!-- saved from url=(0208)https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL?Page=SS_FAC_CLASS_ROST&Action=A&CLASS_NBR=8070&INSTITUTION=NYUNV&INSTRUCTOR_ID=10672576&STRM=1174&TargetFrameName=None -->
+<html dir="ltr" lang="en"><!-- Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved. --><!-- CHROME/55.0/MAC; ToolsRel=8.53.13; User=mpl5; DB=CSPROD/ORACLE; AppServ=//psiscsa03l.cfs.its.nyu.edu:9000; --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script language="JavaScript">
+var  totalTimeoutMilliseconds = 1200000;
+var  warningTimeoutMilliseconds = 1080000;
+var timeOutURL = '?cmd=expire';
+var timeoutWarningPageURL = 'https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/s/WEBLIB_TIMEOUT.PT_TIMEOUTWARNING.FieldFormula.IScript_TIMEOUTWARNING';
+</script>
+
+<link id="PSSTYLEREQ_1_css" rel="stylesheet" type="text/css" href="./PSSTYLEREQ_1(1).css">
+<link id="SSS_STYLESHEET_8_css" rel="stylesheet" type="text/css" href="./SSS_STYLESHEET_8.css">
+<title id="PSPAGETITLE">Self Service Class Roster</title>
+<script language="JavaScript">
+var winParent = null;
+var modalID = null;
+var modalZoomName = null;
+var baseKey_win0 = "\x1b";
+var altKey_win0 = "05678\xbc\xbe\xbf\xde";
+var ctrlKey_win0 = "JK";
+var saveWarningKeys_win0 = "";
+var bAccessibility_win0 =false;
+var bDoModal_win0 = false;
+var bJSModal_win0 = false;
+var bPromptPage_win0 = false;
+var bTabOverTB_win0 = false;
+var bTabOverPg_win0 = false;
+var bTabOverNonPS_win0 = false;
+var strCurrUrl='?PAGE=SS_FAC_CLASS_ROST';
+var bIncInNavigation='F';
+var szCrefID='yyy';
+var szCrefReged='F';
+var szCrefVisible='F';
+var szCrefLabel='zzz';
+var szCalendarType = 'G';
+var bMenuSrchPage = false;
+var bWSRP=0;var szMenuSrchText = "-999999-";
+var modalCloseUrl = '/cs/csprod/cache/853/PT_PORTAL_IC_CLOSE_1.gif';
+var modalCloseAlt = 'Close';
+var modalResizeUrl= '/cs/csprod/cache/853/PT_RESIZE_IMG_1.gif';
+var modalResizeAlt = 'Drag to resize';
+var modalMoveAlt = 'Drag to move';
+</script>
+<script language="JavaScript">
+ var gridRowSelRgbColor_win0 ="rgb(212,219,217)";
+</script>
+<script language="JavaScript">
+try {
+document.domain = "nyu.edu";
+}
+catch(err) {;}
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_COMMON_MIN_1(1).js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_AJAX_NET_MIN_1(1).js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_SAVEWARNINGSCRIPT_MIN_1(1).js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_PAGESCRIPT_win0_MIN_1.js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_EDITSCRIPT_win0_MIN_1.js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_POPUPSCRIPT_win0_MIN_1.js">
+</script>
+<script language="JavaScript" type="text/javascript" src="./PT_GRIDSCRIPT_win0_MIN_1.js">
+</script>
+<script language="JavaScript">
+var nResubmit=0;
+var nLastAction=0;
+var loader=null;
+if (typeof(bCleanHtml) == 'undefined')
+	var bCleanHtml = false;
+setupTimeout2();
+var postUrl_win0='https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL';
+function aAction_win0(form, name, params, bAjax, bPrompt)
+{
+setupTimeout2();
+if ((name != '#ICSave'))
+processing_win0(1,3000);
+aAction0_win0(form, name, params, bAjax, bPrompt);
+}
+function submitAction_win0(form, name)
+{
+setupTimeout2();
+if (!ptCommonObj2.isICQryDownload(form, name))
+ { processing_win0(1,3000); }
+preSubmitProcess_win0(form, name);
+var spellcheckpos = name.indexOf('$spellcheck');
+if ((spellcheckpos != -1) && (name.indexOf('#KEYA5') != -1))
+	form.ICAction.value = name.substring(0,spellcheckpos);
+else
+	form.ICAction.value=name;
+var actionName = form.ICAction.value;
+form.ICXPos.value=ptCommonObj2.getScrollX();
+form.ICYPos.value=ptCommonObj2.getScrollY();
+if (!ptCommonObj2.isAJAXReq(form, name) && !ptCommonObj2.isPromptReq(name)){
+if (nLastAction == 1 && nResubmit > 0) return;
+form.ICResubmit.value=nResubmit;
+form.submit();
+if (!ptCommonObj2.isICQryDownload(form, name))
+	nResubmit++;
+}
+else if (ptCommonObj2.isPromptReq(name))
+	pAction_win0(form, name, arguments[2]);
+else
+	aAction_win0(form, actionName);}
+</script>
+<script language="javascript">
+var pt_calHeadstyle=" class='PTCALHEAD' "
+var pt_calWeekHeadstyle=" class='PTCALWEEKHEAD' "
+function dateitemrefs()
+{
+this.pt_dateheader = "/cs/csprod/cache/853/PT_PORTAL_IC_CLOSE_1.gif";
+this.pt_datering = "/cs/csprod/cache/853/PT_CURRENT_DATE_1.gif";
+this.pt_datesel = "/cs/csprod/cache/853/PT_SELECTED_DATE_1.gif";
+this.pt_nextmonth = "/cs/csprod/cache/853/PT_RIGHT_SCROLL_1.gif";
+this.pt_prevmonth= "/cs/csprod/cache/853/PT_LEFT_SCROLL_1.gif";
+this.pt_daystitle_hijri = "/cs/csprod/cache/853/PT_DATE_TITLE_S6_1.GIF";
+this.pt_daystitle_thai = "/cs/csprod/cache/853/PT_DATE_TITLE_S0_1.GIF";
+this.pt_daystitle_s0 = "/cs/csprod/cache/853/PT_DATE_TITLE_S0_1.GIF";
+this.pt_daystitle_m1 = "/cs/csprod/cache/853/PT_DATE_TITLE_M1_1.GIF";
+this.pt_daystitle_t2 = "/cs/csprod/cache/853/PT_DATE_TITLE_T2_1.GIF";
+this.pt_daystitle_w3 = "/cs/csprod/cache/853/PT_DATE_TITLE_W3_1.GIF";
+this.pt_daystitle_t4 = "/cs/csprod/cache/853/PT_DATE_TITLE_T4_1.GIF";
+this.pt_daystitle_f5 = "/cs/csprod/cache/853/PT_DATE_TITLE_F5_1.gif";
+this.pt_daystitle_s6 = "/cs/csprod/cache/853/PT_DATE_TITLE_S6_1.GIF";
+}
+
+function LoadCalendar()
+{
+var dateitems = new dateitemrefs();
+loadImages(dateitems);
+}
+function DatePrompt_win0(dtfield,promptfield,yrfmt,bsubmit)
+{
+setupTimeout2();
+openDate_win0(dtfield, promptfield, "MDY/"+yrfmt,bsubmit,"G",0);
+}
+</script>
+<script language="JavaScript" ptdefer="defer">
+if (typeof ptStyleSheet == "undefined") {
+ptStyleSheet = 'SSS_STYLESHEET';
+}
+function onLoadExt_win0() {
+modalZoomName = null;
+var pt_pageinfo = document.getElementById('pt_pageinfo_win0');
+if (pt_pageinfo) {
+pt_pageinfo.setAttribute('Page', 'SS_FAC_CLASS_ROST');
+pt_pageinfo.setAttribute('Component', 'SS_CLASS_ROSTER');
+pt_pageinfo.setAttribute('Menu', 'SA_LEARNING_MANAGEMENT');
+}
+
+ g_bAccessibilityMode=false;
+UpdateBreadCrumbs();
+runOnloadScript_win0(false,false,false,false,false,false,false,false,false,false,false,false,false,true,false,3,'ICFocus',false,true);
+if (typeof(HelppopupObj_win0) != 'undefined' && HelppopupObj_win0 != null)
+ HelppopupObj_win0.StopPopup();
+
+doModalOnLoad_win0(false, false);
+ResetGlyph_win0();
+self.scroll(0,0);
+objToBeFocus = null;
+if (typeof oWin == 'undefined') setEventHandlers_win0('ICFirstAnchor_win0', 'ICLastAnchor_win0', false);
+ else
+ oWin.setEventHandlers_win0('ICFirstAnchor_win0', 'ICLastAnchor_win0', false);
+setFocus_win0('DERIVED_SSTSNAV_SSTS_NAV_TABS',-1);
+processing_win0(0,3000);
+ptConsole2.enable();
+
+GenerateABN();
+GenerateFakeBC();
+bcUpdateForPTF();if (typeof(myAppsWindowOpenJS) != 'undefined' && myAppsWindowOpenJS != null && myAppsWindowOpenJS != '')
+ {
+try {eval(myAppsWindowOpenJS);} catch(e) {}
+  myAppsWindowOpenJS=null;
+}
+ResetGlyph_win0();setPageletInfoInCtxmenu_win0('false');}
+try{ptEvent.load(onLoadExt_win0);}catch(e){}
+</script></head>
+<body tabindex="-1" class="PSPAGE">
+<div id="pt_pageinfo_win0" page="SSR_CLASROST_PHOTO" component="SS_CLASS_ROSTER" menu="SA_LEARNING_MANAGEMENT"></div>
+<div id="pt_modalMaskCover">&nbsp;</div><div id="pt_modalMask">&nbsp;</div><div id="pt_console"><input type="button" id="COPYCONSOLE" value="Copy" onclick="ptConsole2.copy();" alt="copy to clipboard" title="copy to clipboard"><input type="button" id="CLEARCONSOLE" onclick="ptConsole2.clear();" value="Clear" alt="clear console" title="clear console"><input type="button" id="HIDECONSOLE" onclick="ptConsole2.hide();" value="Hide" alt="hide console" title="hide console"><input type="button" id="CLOSECONSOLE" onclick="ptConsole2.deactive();" value="Close" alt="close console" title="close console"></div><div id="pt_typeahead0"><span id="pt_typeahead" class="spanTextDropdown">&nbsp;</span></div><div id="WAIT_win0" style="display: none; position: absolute; right: 0px; visibility: hidden; top: 78px;"><img id="processing" align="left" src="./PT_PROCESSING_1.gif" alt="Processing... please wait" title="Processing... please wait"></div>
+ <div id="SAVED_win0" style="display: none; position: absolute; right: 0px; visibility: hidden;"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><img src="./PTPORTAL_POPBOX_LEFT_1.gif" width="7" height="39" border="0" alt=""></td><td id="saveWait_win0" width="35" align="center" valign="middle" background="./PTPORTAL_POPBOX_CENTER_1.gif"><img src="./PT_LOADER_1.gif" width="24" height="24" alt=""></td><td nowrap="nowrap" background="./PTPORTAL_POPBOX_CENTER_1.gif"><span id="ptStatusText_win0" dir="ltr" class="PSPROCESSING">&nbsp;</span></td><td><img src="./PTPORTAL_POPBOX_RIGHT_1.gif" width="6" height="39" alt=""></td><td>&nbsp;</td></tr></tbody></table></div><a name="ICFirstAnchor_win0"></a>
+<form name="win0" method="post" action="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL" autocomplete="off" class="PSForm">
+<div id="win0divPSHIDDENFIELDS" style="display:none"><input type="hidden" name="ICType" id="ICType" value="Panel">
+<input type="hidden" name="ICElementNum" id="ICElementNum" value="0">
+<input type="hidden" name="ICStateNum" id="ICStateNum" value="5">
+<input type="hidden" name="ICAction" id="ICAction" value="None">
+<input type="hidden" name="ICXPos" id="ICXPos" value="0">
+<input type="hidden" name="ICYPos" id="ICYPos" value="78">
+<input type="hidden" name="ResponsetoDiffFrame" id="ResponsetoDiffFrame" value="-1">
+<input type="hidden" name="TargetFrameName" id="TargetFrameName" value="None">
+<input type="hidden" name="FacetPath" id="FacetPath" value="None">
+<input type="hidden" name="ICFocus" id="ICFocus" value="">
+<input type="hidden" name="ICSaveWarningFilter" id="ICSaveWarningFilter" value="0">
+<input type="hidden" name="ICChanged" id="ICChanged" value="-1">
+<input type="hidden" name="ICResubmit" id="ICResubmit" value="0">
+<input type="hidden" name="ICSID" id="ICSID" value="28UTc8XFCIpaciN+YmMCFSbeHhNwDLppeDbq1hIF6UQ=">
+<input type="hidden" name="ICActionPrompt" id="ICActionPrompt" value="false">
+<input type="hidden" name="ICFind" id="ICFind" value="">
+<input type="hidden" name="ICAddCount" id="ICAddCount" value="">
+<input type="hidden" name="ICAPPCLSDATA" id="ICAPPCLSDATA" value="">
+</div><div id="win0divPAGEBAR"></div><div id="win0divPSPANELTABS"></div><div id="win0divPAGECONTAINER"><table class="PSPAGECONTAINER"><tbody><tr><td>
+<div id="win0divPSPAGECONTAINER"><table border="0" id="ACE_width" cellpadding="0" cellspacing="0" class="PSPAGECONTAINER" cols="12" width="926">
+<tbody><tr>
+<td width="0" height="0"></td>
+<td width="4"></td>
+<td width="164"></td>
+<td width="32"></td>
+<td width="196"></td>
+<td width="4"></td>
+<td width="128"></td>
+<td width="78"></td>
+<td width="30"></td>
+<td width="16"></td>
+<td width="28"></td>
+<td width="246"></td>
+</tr>
+<tr>
+<td height="132"></td>
+<td colspan="8" valign="top" align="left">
+<div id="win0divDERIVED_REGFRM1_GROUP_BOX"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="635">
+<tbody><tr><td width="633">
+<table border="0" id="ACE_DERIVED_REGFRM1_GROUP_BOX" cellpadding="0" cellspacing="0" cols="5" width="633" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="0"></td>
+<td width="9"></td>
+<td width="1"></td>
+<td width="610"></td>
+<td width="10"></td>
+</tr>
+<tr>
+<td height="90"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_GROUP_BOX"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="619">
+<tbody><tr><td width="617">
+<table border="0" id="ACE_DERIVED_SSTSNAV_GROUP_BOX" cellpadding="0" cellspacing="0" cols="4" width="617" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="7" height="0"></td>
+<td width="2"></td>
+<td width="602"></td>
+<td width="6"></td>
+</tr>
+<tr>
+<td height="30" colspan="2"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_PERSON_NAME"><span class="PALEVEL0PRIMARY" id="DERIVED_SSTSNAV_PERSON_NAME">Matthew P Leingang</span>
+</div></td>
+</tr>
+<tr>
+<td height="28"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_SSTS_NAV_TABS"><div style="width:604px; ">
+<!-- Begin HTML Area Name Undisclosed -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><img src="./PS_CS_TAB_A_LEFT_TOP_IMG_1.gif" style="display:block;" width="8" height="6"></td>
+<td><img src="./PS_CS_TAB_A_CENTERTOP_IMG_1.gif" style="display:block;" height="6" class="SSSTABWIDTH"></td>
+<td><img src="./PS_CS_TAB_A_RIGHT_TOP_IMG_1.gif" style="display:block;" width="8" height="6"></td><td><img src="./PS_CS_TAB_IA_LEFT_TOP_IMG_1.gif" style="display:block;" width="8" height="6"></td>
+<td><img src="./PS_CS_TAB_IA_CENTERTOP_IMG_1.gif" style="display:block;" height="6" class="SSSTABWIDTH"></td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_TOP_IMG_1.gif" style="display:block;" width="8" height="6"></td></tr><tr><td><img src="./PS_CS_TAB_A_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td>
+<td class="SSSTABACTIVE" width="50%"><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_FACULTY.GBL?Page=INSTR_CLASS3&amp;Action=A" class="SSSTABMAINTEXT">Faculty Center</a></td>
+<td><img src="./PS_CS_TAB_A_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td>
+<td class="SSSTABINACTIVE" width="50%"><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/NYU_SR.NYU_CLS_SRCH.GBL?Page=NYU_CLS_SRCH&amp;Action=U&amp;Source=SC" class="SSSTABMAINTEXT">Search</a></td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td></tr><tr><td><img src="./PS_CS_TAB_A_LEFT_BOTTOM_IMG_1.gif" style="display:block;" width="8" height="2"></td>
+<td><img src="./PS_CS_TAB_A_CENTERBOTTOM_IMG_1.gif" style="display:block;" height="2" class="SSSTABWIDTH"></td>
+<td><img src="./PS_CS_TAB_A_RIGHT_BOTTOM_IMG_1.gif" style="display:block;" width="8" height="2"></td><td><img src="./PS_CS_TAB_IA_LEFT_BOTTOM_IMG_1.gif" style="display:block;" width="8" height="2"></td>
+<td><img src="./PS_CS_TAB_IA_CENTERBOTTOM_IMG_1.gif" style="display:block;" height="2" class="SSSTABWIDTH"></td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_BOTTOM_IMG_1.gif" style="display:block;" width="8" height="2"></td></tr></tbody></table>
+<!-- End HTML Area -->
+</div>
+</div></td>
+</tr>
+<tr>
+<td height="23"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_SSTS_NAV_SUBTABS"><div style="width:604px; ">
+<!-- Begin HTML Area Name Undisclosed -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td>
+<td class="SSSTABINACTIVE" height="2"> </td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td><td><img src="./PS_CS_TAB_A_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td>
+<td class="SSSTABACTIVE" height="2"> </td>
+<td><img src="./PS_CS_TAB_A_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td>
+<td class="SSSTABINACTIVE" height="2"> </td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="2"></td></tr><tr><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td>
+<td class="SSSTABINACTIVE" width="33%"><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_FACULTY.GBL?Page=INSTR_CLASS3&amp;Action=A" class="SSSTABMAINTEXT">my schedule</a></td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td><td><img src="./PS_CS_TAB_A_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td>
+<td class="SSSTABACTIVE" width="33%"><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL?Page=SS_FAC_CLASS_ROST&amp;Action=A" class="SSSTABMAINTEXT">class roster</a></td>
+<td><img src="./PS_CS_TAB_A_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td>
+<td class="SSSTABINACTIVE" width="33%"><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_GRADE_RSTR.GBL?Page=SS_GRADE_ROSTER&amp;Action=A" class="SSSTABMAINTEXT">grade roster</a></td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="15"></td></tr><tr><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td>
+<td class="SSSTABINACTIVE" height="1"> </td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td><td><img src="./PS_CS_TAB_A_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td>
+<td class="SSSTABACTIVE" height="1"> </td>
+<td><img src="./PS_CS_TAB_A_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td><td><img src="./PS_CS_TAB_IA_LEFT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td>
+<td class="SSSTABINACTIVE" height="1"> </td>
+<td><img src="./PS_CS_TAB_IA_RIGHT_CENTER_IMG_1.gif" style="display:block;" width="8" height="1"></td></tr></tbody></table>
+<!-- End HTML Area -->
+</div>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="5"></td>
+</tr>
+<tr>
+<td height="20" colspan="3"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divDERIVED_REGFRM1_SS_TRANSACT_TITLE"><span class="PATRANSACTIONTITLE" id="DERIVED_REGFRM1_SS_TRANSACT_TITLE">Class Roster</span>
+</div></td>
+</tr>
+<tr>
+<td height="20" colspan="2"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divDERIVED_REGFRM1_TITLE1"><span class="PAPAGETITLE" id="DERIVED_REGFRM1_TITLE1">&nbsp;</span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="10" colspan="12"></td>
+</tr>
+<tr>
+<td height="150" colspan="2"></td>
+<td colspan="6" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_GROUPBOX"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="601">
+<tbody><tr><td width="599">
+<table border="0" id="ACE_DERIVED_SSR_FC_GROUPBOX" cellpadding="0" cellspacing="0" cols="5" width="599" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="7" height="0"></td>
+<td width="1"></td>
+<td width="43"></td>
+<td width="544"></td>
+<td width="4"></td>
+</tr>
+<tr>
+<td height="10" colspan="2"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SSS_PAGE_KEYDESCR2"><span class="SSSKEYTEXT" id="DERIVED_SSR_FC_SSS_PAGE_KEYDESCR2">Spring 2017 | Regular Academic Session | New York University | Undergraduate</span>
+</div></td>
+</tr>
+<tr>
+<td height="8"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0div$ICField281"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="44">
+<tbody><tr><td width="42" height="6">
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="115"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_"><table cellpadding="2" cellspacing="0" cols="1" class="SSSGROUPBOXLEFTWBO" width="587">
+<tbody><tr><td width="585">
+<table border="0" id="ACE_DERIVED_SSR_FC_" cellpadding="0" cellspacing="0" cols="7" width="585" class="SSSGROUPBOXLEFT" style="border-style:none">
+<tbody><tr>
+<td width="7" height="6"></td>
+<td width="16"></td>
+<td width="8"></td>
+<td width="124"></td>
+<td width="120"></td>
+<td width="304"></td>
+<td width="6"></td>
+</tr>
+<tr>
+<td height="1"></td>
+<td colspan="2" rowspan="3" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SSR_EXPAND_COLLAPS"><a name="DERIVED_SSR_FC_SSR_EXPAND_COLLAPS" id="DERIVED_SSR_FC_SSR_EXPAND_COLLAPS" tabindex="29" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSR_FC_SSR_EXPAND_COLLAPS&#39;);"><img src="./PS_COLLAPSE_ICN_1.gif" name="DERIVED_SSR_FC_SSR_EXPAND_COLLAPS$IMG" alt="Expand / Collapse" title="Expand / Collapse" border="0"></a>
+</div></td>
+<td></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_$262$"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="119">
+<tbody><tr><td width="117">
+<table border="0" id="ACE_DERIVED_SSR_FC_$262$" cellpadding="0" cellspacing="0" cols="2" width="117" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="11" height="0"></td>
+<td width="106"></td>
+</tr>
+<tr>
+<td height="9"></td>
+<td nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SSS_CHG_CLS_LINK"><span id="DERIVED_SSR_FC_SSS_CHG_CLS_LINK$span" class="SSSBUTTON_ACTIONLINK"><a name="DERIVED_SSR_FC_SSS_CHG_CLS_LINK" id="DERIVED_SSR_FC_SSS_CHG_CLS_LINK" ptlinktgt="pt_peoplecode" tabindex="31" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSR_FC_SSS_CHG_CLS_LINK&#39;);" class="SSSBUTTON_ACTIONLINK">Change Class</a></span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="17"></td>
+<td rowspan="2" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SSR_CLASSNAME_LONG"><span id="DERIVED_SSR_FC_SSR_CLASSNAME_LONG$span" class="PALEVEL0SECONDARY" title="View Details"><a name="DERIVED_SSR_FC_SSR_CLASSNAME_LONG" id="DERIVED_SSR_FC_SSR_CLASSNAME_LONG" ptlinktgt="pt_peoplecode" tabindex="30" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSR_FC_SSR_CLASSNAME_LONG&#39;);" class="PALEVEL0SECONDARY">MATH-UA 122 - 005  (8070)</a></span>
+</div></td>
+</tr>
+<tr>
+<td height="4"></td>
+</tr>
+<tr>
+<td height="68" colspan="2"></td>
+<td colspan="4" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_GROUPBOX1"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="555">
+<tbody><tr><td width="553">
+<table border="0" id="ACE_DERIVED_SSR_FC_GROUPBOX1" cellpadding="0" cellspacing="0" cols="5" width="553" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="7" height="0"></td>
+<td width="1"></td>
+<td width="43"></td>
+<td width="500"></td>
+<td width="2"></td>
+</tr>
+<tr>
+<td height="10" colspan="2"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_DESCR254"><span class="PSEDITBOX_DISPONLY" id="DERIVED_SSR_FC_DESCR254">Calculus II (Lecture)</span>
+</div></td>
+</tr>
+<tr>
+<td height="8"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0div$ICField277"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="44">
+<tbody><tr><td width="42" height="6">
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="5"></td>
+</tr>
+<tr>
+<td height="32"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divCLASS_MTG_NBR$0"><table cellspacing="0" class="PSLEVEL3GRIDNBO" id="CLASS_MTG_NBR$scroll$0" dir="ltr" cols="4" width="544" cellpadding="2">
+<tbody><tr>
+<th scope="col" abbr="Days and Times" width="106" align="left" class="SSSGRIDCOLUMNHDRTXTWBO">Days and Times</th>
+<th scope="col" abbr="Location" width="98" align="left" class="SSSGRIDCOLUMNHDRTXTWBO">Location</th>
+<th scope="col" abbr="Instructor" width="98" align="left" class="SSSGRIDCOLUMNHDRTXTWBO">Instructor</th>
+<th scope="col" abbr="Dates" width="72" align="left" class="SSSGRIDCOLUMNHDRTXTWBO">Dates</th>
+</tr>
+<tr id="trCLASS_MTG_NBR$0_row1" valign="center">
+<td align="left" height="13" class="PSLEVEL3GRIDROW">
+<div id="win0divMTG_SCHED$0"><span class="PSLONGEDITBOX" id="MTG_SCHED$0">TuTh 11:00AM-12:50PM</span>
+</div></td>
+<td align="left" class="PSLEVEL3GRIDROW">
+<div id="win0divMTG_LOC$0"><span class="PSLONGEDITBOX" id="MTG_LOC$0">Bldg:WAVE&nbsp; Room:367 Loc: Washington Square</span>
+</div></td>
+<td align="left" class="PSLEVEL3GRIDROW">
+<div id="win0divMTG_INSTR$0"><span class="PSLONGEDITBOX" id="MTG_INSTR$0">Matthew P Leingang</span>
+</div></td>
+<td align="left" class="PSLEVEL3GRIDROW">
+<div id="win0divMTG_DATE$0"><span class="PSLONGEDITBOX" id="MTG_DATE$0">01/23/2017 - 05/08/2017</span>
+</div></td>
+</tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="4" colspan="5"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="7"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="2" colspan="5"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="4" colspan="12"></td>
+</tr>
+<tr>
+<td height="353" colspan="2"></td>
+<td colspan="9" valign="top" align="left">
+<div id="win0divDERIVED_AA2_"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="675">
+<tbody><tr><td width="673">
+<table border="0" id="ACE_DERIVED_AA2_" cellpadding="0" cellspacing="0" cols="6" width="673" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="0" height="0"></td>
+<td width="4"></td>
+<td width="488"></td>
+<td width="88"></td>
+<td width="84"></td>
+<td width="10"></td>
+</tr>
+<tr>
+<td height="49"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0div$ICField263"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="579">
+<tbody><tr><td class="PAGROUPBOXLABELINVISIBLE" align="left">Group Box</td></tr>
+<tr><td width="577">
+<table border="0" id="ACE_$ICField263" cellpadding="0" cellspacing="0" cols="7" width="577" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="0"></td>
+<td width="4"></td>
+<td width="121"></td>
+<td width="71"></td>
+<td width="65"></td>
+<td width="279"></td>
+<td width="34"></td>
+</tr>
+<tr>
+<td height="21"></td>
+<td colspan="5" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_STDNT_ENRL_STATUS"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="539">
+<tbody><tr><td width="537">
+<table border="0" id="ACE_DERIVED_SR_RSTR_STDNT_ENRL_STATUS" cellpadding="0" cellspacing="0" cols="3" width="537" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="0" height="0"></td>
+<td width="120"></td>
+<td width="418"></td>
+</tr>
+<tr>
+<td height="15"></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_SSR_ENRL_STATUS_WKlbl"><label for="DERIVED_SR_RSTR_SSR_ENRL_STATUS_WK" id="DERIVED_SR_RSTR_SSR_ENRL_STATUS_WK_LBL" class="SSSTEXTTURQBOLD">*Enrollment Status <span class="psaccesshidden">Required</span></label>
+</div></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_SSR_ENRL_STATUS_WK"><select name="DERIVED_SR_RSTR_SSR_ENRL_STATUS_WK" id="DERIVED_SR_RSTR_SSR_ENRL_STATUS_WK" tabindex="67" size="1" class="PSDROPDOWNLIST" style="width:92px; " onchange="addchg_win0(this);submitAction_win0(this.form,this.name);">
+<option value="A">All</option>
+<option value="D">Dropped</option>
+<option value="E" selected="selected">Enrolled</option>
+</select>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="9" colspan="7"></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_ENRL_CAPlbl"><span class="SSSTEXTTURQBOLD">Enrollment Capacity</span> </div></td>
+<td></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_SSR_ROSTER_CTR1lbl"><span class="SSSTEXTTURQBOLD">Enrolled</span> </div></td>
+</tr>
+<tr>
+<td height="13" colspan="2"></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_ENRL_CAP"><span class="PSEDITBOX_DISPONLY" id="DERIVED_SR_RSTR_ENRL_CAP">35</span>
+</div></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_SSR_ROSTER_CTR1"><span class="PSEDITBOX_DISPONLY" id="DERIVED_SR_RSTR_SSR_ROSTER_CTR1">30</span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="4" colspan="6"></td>
+</tr>
+<tr>
+<td height="28" colspan="2"></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SSS_ADV_SSS_ADVISEE_DISP"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="487">
+<tbody><tr><td width="485">
+<table border="0" id="ACE_DERIVED_SSS_ADV_SSS_ADVISEE_DISP" cellpadding="0" cellspacing="0" cols="4" width="485" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="0"></td>
+<td width="144"></td>
+<td width="128"></td>
+<td width="210"></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td rowspan="2" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$"><input type="radio" name="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$" id="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$" class="PSRADIOBUTTON" tabindex="70" value="L" onclick="setupTimeout2();addchg_win0(this);submitAction_win0(this.form,this.name);"><label for="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$" id="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$_LBL" class="PSRADIOBUTTON">Link to Photos</label>
+
+</div></td>
+<td rowspan="2" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSS_ADV_SSS_ADVISEE_DISP$4$"><input type="radio" name="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$3$" id="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$4$" class="PSRADIOBUTTON" tabindex="71" value="W" checked="checked" onclick="setupTimeout2();addchg_win0(this);submitAction_win0(this.form,this.name);"><label for="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$4$" id="DERIVED_SSS_ADV_SSS_ADVISEE_DISP$4$_LBL" class="PSRADIOBUTTON">Include photos in list</label>
+
+</div></td>
+</tr>
+<tr>
+<td height="17"></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SSS_ADV_SSS_ADVISEE_DISP$2$lbl"><span class="SSSTEXTTURQBOLD">Select display option:</span> </div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="10" colspan="6"></td>
+</tr>
+<tr>
+<td height="244" colspan="2" style="height: 100px;"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divCLASS_ROSTER_VW$0"><table cellpadding="2" cellspacing="0" cols="1" class="PSLEVEL1SCROLLAREABODYWBO" id="CLASS_ROSTER_VW$scroll$0" width="659">
+<tbody><tr><td class="PSLEVEL1SCROLLAREAHEADER" align="right"><div id="win0divCLASS_ROSTER_VWGP$0"><a name="CLASS_ROSTER_VW$hfind$0" id="CLASS_ROSTER_VW$hfind$0" tabindex="73" onclick="return FindString_win0(document.win0.ICFind);" href="javascript:submitAction_win0(document.win0,&#39;CLASS_ROSTER_VW$hfind$0&#39;);" class="PSLEVEL1SCROLLAREAHEADER">Find</a>&nbsp;|&nbsp;<a name="CLASS_ROSTER_VW$hviewall$0" id="CLASS_ROSTER_VW$hviewall$0" tabindex="74" href="javascript:submitAction_win0(document.win0,&#39;CLASS_ROSTER_VW$hviewall$0&#39;);" class="PSLEVEL1SCROLLAREAHEADER">View 1</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="PSHEADERHYPERLINKD">First</span>&nbsp;<img src="./PT_PREVIOUSROW_D_1.gif" name="CLASS_ROSTER_VW$hup$img$0" alt="Show previous row (inactive button) (Alt+,)" title="Show previous row (inactive button) (Alt+,)" border="0">&nbsp;<span class="PSGRIDCOUNTER">1-30 of 30</span>&nbsp;<img src="./PT_NEXTROW_D_1.gif" name="CLASS_ROSTER_VW$hdown$img$0" alt="Show next row (inactive button) (Alt+.)" title="Show next row (inactive button) (Alt+.)" border="0">&nbsp;<span class="PSHEADERHYPERLINKD">Last</span>&nbsp;</div></td></tr>
+<tr><td width="653">
+<table border="0" id="ACE_CLASS_ROSTER_VW$0" cellpadding="0" cellspacing="0" cols="7" width="653" class="PSLEVEL1SCROLLAREABODY" style="border-style:none">
+<tbody><tr>
+<td width="0" height="3"></td>
+<td width="7"></td>
+<td width="120"></td>
+<td width="20"></td>
+<td width="496"></td>
+<td width="1"></td>
+<td width="11"></td>
+</tr>
+{% for student in students %}
+<tr>
+<td height="27" colspan="4"></td>
+<td rowspan="4" valign="top" align="left">
+<div id="win0divDERIVED_AA2_$228${{ loop.index0 }}"><table border="0" id="ACE_DERIVED_AA2_$228${{ loop.index0 }}" cellpadding="0" cellspacing="0" cols="8" width="495" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="4" height="0"></td>
+<td width="4"></td>
+<td width="91"></td>
+<td width="17"></td>
+<td width="1"></td>
+<td width="32"></td>
+<td width="131"></td>
+<td width="215"></td>
+</tr>
+<tr>
+<td height="24"></td>
+<td colspan="7" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_AA2_SELECT${{ loop.index0 }}"><input type="hidden" name="DERIVED_AA2_SELECT$chk${{ loop.index0 }}" id="DERIVED_AA2_SELECT$chk${{ loop.index0 }}" value="">
+<input type="checkbox" name="DERIVED_AA2_SELECT${{ loop.index0 }}" id="DERIVED_AA2_SELECT${{ loop.index0 }}" class="PSCHECKBOX" tabindex="85" value="Y" onclick="setupTimeout2();	this.form.DERIVED_AA2_SELECT$chk${{ loop.index0 }}.value=(this.checked?&#39;Y&#39;:&#39;N&#39;);doFocus_win0(this,false,true);"><label for="DERIVED_AA2_SELECT${{ loop.index0 }}" id="DERIVED_AA2_SELECT_LBL${{ loop.index0 }}" class="PSCHECKBOX">Notify</label>
+
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divCLASS_ROSTER_VW_EMPLIDlbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">ID</span> </div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divCLASS_ROSTER_VW_EMPLID${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="CLASS_ROSTER_VW_EMPLID${{ loop.index0 }}">{{ student.id }}</span>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divSCC_PRFPRIMNMVW_NAMElbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Name</span> </div></td>
+</tr>
+<tr>
+<td height="20" colspan="2"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divSCC_PRFPRIMNMVW_NAME${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="SCC_PRFPRIMNMVW_NAME${{ loop.index0 }}">{{ student.Name }}</span>
+</div></td>
+</tr>
+<tr>
+<td height="3" colspan="4"></td>
+<td colspan="4" rowspan="2" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSSMAIL_EMAIL_ADDR${{ loop.index0 }}"><span id="DERIVED_SSSMAIL_EMAIL_ADDR$span${{ loop.index0 }}" class="PSHYPERLINK" title="Send E-mail"><a name="DERIVED_SSSMAIL_EMAIL_ADDR${{ loop.index0 }}" id="DERIVED_SSSMAIL_EMAIL_ADDR${{ loop.index0 }}" ptlinktgt="pt_replace" tabindex="87" onfocus="doFocus_win0(this,false,true);" href="mailto:{{ student['Email Address'] }}" class="PSHYPERLINK">{{ student['Email Address'] }}</a></span>
+</div></td>
+</tr>
+<tr>
+<td height="20" colspan="2"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divSCC_PREF_EMAIL_EMAIL_ADDRlbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Email</span> </div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divSCC_PREF_PHN_VW_PHONElbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Phone</span> </div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divSCC_PREF_PHN_VW_PHONE${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="SCC_PREF_PHN_VW_PHONE${{ loop.index0 }}">{{ student.Telephone }}</span>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_UNT_TAKENlbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Units Taken</span> </div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="3" valign="top" align="right">
+<div id="win0divCLASS_ROSTER_VW_UNT_TAKEN${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="CLASS_ROSTER_VW_UNT_TAKEN${{ loop.index0 }}">4.00</span>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_AA2_PROG_PLANlbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Program &amp; Plan</span> </div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divPROGPLAN${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="PROGPLAN${{ loop.index0 }}">{{ student['Program and Plan']|e }}</span>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divSTDNT_CAR_TERM_ACAD_LEVEL_BOTlbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Level</span> </div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="3" valign="top" align="left">
+<div id="win0divPROGPLAN1${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="PROGPLAN1${{ loop.index0 }}">{{ student.Level }}</span>
+</div></td>
+</tr>
+<tr>
+<td height="1" colspan="2"></td>
+<td colspan="3" rowspan="2" valign="top" align="left">
+<div id="win0divCLASS_ROSTER_VW_SSR_ENRL_STATS_WK2lbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Status</span> </div></td>
+<td colspan="2"></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_SR_RSTR_SSR_ENRL_STATUS_WK$252$lbl${{ loop.index0 }}"><span class="PSEDITBOXLABEL">Status Note</span> </div></td>
+</tr>
+<tr>
+<td height="11" colspan="2"></td>
+<td colspan="2" valign="top" align="left">
+<div id="win0divPSXLATITEM_XLATLONGNAME${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="PSXLATITEM_XLATLONGNAME${{ loop.index0 }}">Enrolled</span>
+</div></td>
+</tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="102" colspan="2"></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0divDERIVED_AA2_$227${{ loop.index0 }}"><table cellpadding="2" cellspacing="0" cols="1" class="PSGROUPBOXWBO" width="119">
+<tbody><tr><td width="117">
+{% if student.photo_filename is defined %}
+<table border="0" id="ACE_DERIVED_AA2_$227${{ loop.index0 }}" cellpadding="0" cellspacing="0" cols="3" width="117" class="PSGROUPBOX" style="border-style:none">
+<tbody><tr>
+<td width="3" height="0"></td>
+<td width="110"></td>
+<td width="4"></td>
+</tr>
+<tr>
+<td height="113"></td>
+<td valign="top" align="left">
+<div id="win0divEMPL_PHOTO_EMPLOYEE_PHOTO${{ loop.index0 }}"><img src="./{{ student.photo_filename }}" width="110" height="110" alt="" title="" class="PSIMAGE">
+</div></td>
+</tr>
+</tbody></table>
+{% else %}
+<table border="0" id="ACE_DERIVED_AA2_$227$$14" cellpadding="0" cellspacing="0" cols="2" width="117" class="PSGROUPBOX" style="border-style:none">
+<tbody><tr>
+<td width="12" height="46"></td>
+<td width="105"></td>
+</tr>
+<tr>
+<td height="56"></td>
+<td valign="top" align="left">
+<div id="win0divDERIVED_SSS_ADV_DESCR$14"><span class="PSEDITBOX_DISPONLY" id="DERIVED_SSS_ADV_DESCR$14">No Photo On File</span>
+</div></td>
+</tr>
+</tbody></table>
+{% endif %}
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="18" colspan="2"></td>
+<td rowspan="3"></td>
+<td rowspan="3" valign="top" align="right">
+<div id="win0divDERIVED_SR_RSTR_UNT_TAKEN${{ loop.index0 }}"><span class="PSEDITBOX_DISPONLY" id="DERIVED_SR_RSTR_UNT_TAKEN{{ loop.index0 }}">&nbsp;</span>
+</div></td>
+</tr>
+{% if not loop.last %}
+<tr>
+<td height="10" colspan="3"></td>
+</tr>
+<tr>
+<td height="9" colspan="3"></td>
+</tr>
+<tr>
+<td height="12"></td>
+<td colspan="6" valign="top" align="left">
+<hr width="100%" align="left" class="PSLEVEL1SCROLLAREABODY">
+</td>
+</tr>
+{% endif %}
+{% endfor %}
+<!-- end of students -->
+<tr>
+<td height="10" colspan="3"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="10" colspan="6"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="10" colspan="12"></td>
+</tr>
+<tr>
+<td height="6" colspan="2"></td>
+<td rowspan="3" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SELECT_ALL"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="163">
+<tbody><tr><td width="161">
+<table border="0" id="ACE_DERIVED_SSR_FC_SELECT_ALL" cellpadding="0" cellspacing="0" cols="3" width="161" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="0"></td>
+<td width="64"></td>
+<td width="94"></td>
+</tr>
+<tr>
+<td height="13"></td>
+<td nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_SELECT_ALL$265$"><span id="DERIVED_SSR_FC_SELECT_ALL$265$$span" class="PSHYPERLINK"><a name="DERIVED_SSR_FC_SELECT_ALL$265$" id="DERIVED_SSR_FC_SELECT_ALL$265$" ptlinktgt="pt_peoplecode" tabindex="107" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSR_FC_SELECT_ALL$265$&#39;);" class="PSHYPERLINK">Select All</a></span>
+</div></td>
+<td nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSR_FC_DESELECT_ALL"><span id="DERIVED_SSR_FC_DESELECT_ALL$span" class="PSHYPERLINK"><a name="DERIVED_SSR_FC_DESELECT_ALL" id="DERIVED_SSR_FC_DESELECT_ALL" ptlinktgt="pt_peoplecode" tabindex="108" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSR_FC_DESELECT_ALL&#39;);" class="PSHYPERLINK">Clear All</a></span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="11" colspan="2"></td>
+<td colspan="4"></td>
+<td colspan="5" nowrap="nowrap" valign="top" align="left">
+<div id="win0divDERIVED_SSE_LNK_SA_LINK_PRINTER1"><span id="DERIVED_SSE_LNK_SA_LINK_PRINTER1$span" class="PSHYPERLINK"><a name="DERIVED_SSE_LNK_SA_LINK_PRINTER1" id="DERIVED_SSE_LNK_SA_LINK_PRINTER1" ptlinktgt="pt_peoplecode" tabindex="112" href="javascript:submitAction_win0(document.win0,&#39;DERIVED_SSE_LNK_SA_LINK_PRINTER1&#39;);" class="PSHYPERLINK">Printer Friendly Version</a></span>
+</div></td>
+</tr>
+<tr>
+<td height="3" colspan="2"></td>
+<td colspan="3" rowspan="2"></td>
+<td colspan="6" rowspan="3" valign="top" align="left">
+<div id="win0divNYU_DERIVED_SR_NYU_EMAIL_DELIMITlbl"><label for="NYU_DERIVED_SR_NYU_EMAIL_DELIMIT" id="NYU_DERIVED_SR_NYU_EMAIL_DELIMIT_LBL" class="PSDROPDOWNLABEL">Email Delimiter</label>
+</div></td>
+</tr>
+<tr>
+<td height="4" colspan="3"></td>
+</tr>
+<tr>
+<td height="9" colspan="2"></td>
+<td colspan="2" rowspan="2" valign="top" align="left">
+<div id="win0div$ICField153"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="195">
+<tbody><tr><td width="193">
+<table border="0" id="ACE_$ICField153" cellpadding="0" cellspacing="0" cols="2" width="193" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="9"></td>
+<td width="190"></td>
+</tr>
+<tr>
+<td height="13"></td>
+<td nowrap="nowrap" valign="top" align="left">
+<div id="win0divNYU_DERIVED_SR_DERIVED_LINK6"><span id="NYU_DERIVED_SR_DERIVED_LINK6$span" class="SSSBUTTON_BLUELINK" title="Send Notifications"><a name="NYU_DERIVED_SR_DERIVED_LINK6" id="NYU_DERIVED_SR_DERIVED_LINK6" ptlinktgt="pt_peoplecode" tabindex="109" href="javascript:submitAction_win0(document.win0,&#39;NYU_DERIVED_SR_DERIVED_LINK6&#39;);" class="SSSBUTTON_BLUELINK">Notify Selected Students</a></span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+<td rowspan="2" valign="top" align="left">
+<div id="win0div$ICField154"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="195">
+<tbody><tr><td width="193">
+<table border="0" id="ACE_$ICField154" cellpadding="0" cellspacing="0" cols="2" width="193" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="3" height="9"></td>
+<td width="190"></td>
+</tr>
+<tr>
+<td height="13"></td>
+<td nowrap="nowrap" valign="top" align="left">
+<div id="win0divNYU_DERIVED_SR_DERIVED_LINK2"><span id="NYU_DERIVED_SR_DERIVED_LINK2$span" class="SSSBUTTON_BLUELINK" title="Return to Previous Page"><a name="NYU_DERIVED_SR_DERIVED_LINK2" id="NYU_DERIVED_SR_DERIVED_LINK2" ptlinktgt="pt_peoplecode" tabindex="110" href="javascript:submitAction_win0(document.win0,&#39;NYU_DERIVED_SR_DERIVED_LINK2&#39;);" class="SSSBUTTON_BLUELINK">Notify All Students</a></span>
+</div></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="15" colspan="2"></td>
+<td rowspan="2"></td>
+<td colspan="6" rowspan="2" valign="top" align="left">
+<div id="win0divNYU_DERIVED_SR_NYU_EMAIL_DELIMIT"><select name="NYU_DERIVED_SR_NYU_EMAIL_DELIMIT" id="NYU_DERIVED_SR_NYU_EMAIL_DELIMIT" tabindex="111" size="1" class="PSDROPDOWNLIST" style="width:96px; " onchange="addchg_win0(this);return doEdits_win0(this,&#39;&#39;,&#39;N&#39;,&#39;N&#39;,&#39;N&#39;,&#39;N&#39;,&#39;Y&#39;,&#39;Y&#39;,0);">
+<option value="">&nbsp; </option>
+<option value="C" selected="selected">Comma (,)</option>
+<option value="S">Semicolon (;)</option>
+</select>
+</div></td>
+</tr>
+<tr>
+<td height="4" colspan="5"></td>
+</tr>
+<tr>
+<td height="64"></td>
+<td colspan="9" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_GROUP_BOX$19$"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="651">
+<tbody><tr><td width="649">
+<table border="0" id="ACE_DERIVED_SSTSNAV_GROUP_BOX$19$" cellpadding="0" cellspacing="0" cols="7" width="649" class="PABACKGROUNDINVISIBLE" style="border-style:none">
+<tbody><tr>
+<td width="5" height="0"></td>
+<td width="2"></td>
+<td width="2"></td>
+<td width="36"></td>
+<td width="580"></td>
+<td width="2"></td>
+<td width="22"></td>
+</tr>
+<tr>
+<td height="13"></td>
+<td colspan="4" valign="top" align="left">
+<hr width="100%" align="left" class="PSHORIZONTALRULE">
+</td>
+</tr>
+<tr>
+<td height="20" colspan="2"></td>
+<td colspan="4" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_SSS_FOOTER_LINKS"><div style="width:620px; ">
+<!-- Begin HTML Area Name Undisclosed -->
+<table border="0" cellspacing="0" cellpadding="0"><tbody><tr><td>&nbsp;</td>
+<td><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_FACULTY.GBL?Page=INSTR_CLASS3&amp;Action=A" class="SSSFOOTERLINKBOLD">Faculty Center</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td><td>&nbsp;</td>
+<td><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/NYU_SR.NYU_CLS_SRCH.GBL?Page=NYU_CLS_SRCH&amp;Action=U&amp;Source=SC" class="SSSFOOTERLINKBOLD">Search</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td></tr></tbody></table>
+<!-- End HTML Area -->
+</div>
+</div></td>
+</tr>
+<tr>
+<td height="19" colspan="2"></td>
+<td colspan="4" valign="top" align="left">
+<div id="win0divDERIVED_SSTSNAV_SSS_SUBFOOT_LINKS"><div style="width:620px; ">
+<!-- Begin HTML Area Name Undisclosed -->
+<table border="0" cellspacing="0" cellpadding="0"><tbody><tr><td>&nbsp;</td>
+<td><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_FACULTY.GBL?Page=INSTR_CLASS3&amp;Action=A" class="SSSFOOTERLINK">My Schedule</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td><td>&nbsp;</td>
+<td><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL?Page=SS_FAC_CLASS_ROST&amp;Action=A" class="SSSFOOTERLINK">Class Roster</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td><td>&nbsp;</td>
+<td><a href="https://sis.nyu.edu/psc/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_GRADE_RSTR.GBL?Page=SS_GRADE_ROSTER&amp;Action=A" class="SSSFOOTERLINK">Grade Roster</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td></tr></tbody></table>
+<!-- End HTML Area -->
+</div>
+</div></td>
+</tr>
+<tr>
+<td height="8" colspan="3"></td>
+<td valign="top" align="left">
+<div id="win0div$ICField13"><table cellpadding="2" cellspacing="0" cols="1" class="PABACKGROUNDINVISIBLEWBO" width="36">
+<tbody><tr><td width="34" height="6">
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="0" colspan="7"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div></td>
+</tr>
+<tr>
+<td height="10" colspan="12"></td>
+</tr>
+</tbody></table>
+</div></td></tr>
+</tbody></table>
+<div id="pt_dragtxt" class="PSLEVEL1GRIDCOLUMNHDR"></div><div onmouseup="ptGridResizeObj_win0.TDselUp();" onmousemove="ptGridResizeObj_win0.TDselMove();" id="pt_dragResize" onmouseout="ptGridResizeObj_win0.dragTD=false;" onmbouseover="ptGridResizeObj_win0.dragTD=true;"></div></div><div id="DetachDiv" height="0" width="0" frameborder="0"></div>
+</form>
+<a name="ICLastAnchor_win0"></a>
+<div id="popupDragFrame" class="popupDragFrame">&nbsp;</div>
+<!-- Mouse-over popup Begin -->
+<table id="win0MOpopupContainer" width="20" border="0" cellpadding="0" cellspacing="0" style="display:none; position:absolute; top:0; left:0;" onmouseover="MOpopupObj_win0.StartPopup(&#39;win0MOpopupContainer&#39;, &#39;&#39;);" onmouseout="MOpopupObj_win0.StopPopup();"><tbody><tr>
+<td id="win0MOpopupInner" height="25" width="20" align="left" valign="top" class="MOBGImage">
+<div id="win0MOdivpopupFrame" tabindex="-1" onclick="MOpopupObj_win0.SetFocusFlag(false);" style="overflow:auto; width:20px; height: 60px; padding:8px; box-shadow:0 0 5px #000000; background-color:white; border: 1px solid #666666;">test</div></td>
+</tr>
+</tbody></table>
+<!-- Mouse-over popup End  -->
+
+<!-- Embedded Help popup Begin -->
+<div id="HelppopupDiv_win0" style="display:none; position:absolute; top:0; left:0">t</div>
+<div id="HelpDragFrame_win0" class="popupDragFrame">&nbsp;</div><table id="HelppopupContainer_win0" width="20" border="0" cellpadding="0" cellspacing="0" style="opacity:1; display:none; position:absolute; top:0; left:0">
+<tbody><tr>
+<td id="HelppopupInner_win0" class="HelppopupInner" align="left" valign="top" style="position:absolute;z-Index:302;">
+<div id="HelppopupTitleBar_win0" class="PTPOPUP_HEADER HelppopupTitleBar" style="width:341px"><div id="HelppopupTitleBarLeftImage"></div><div id="HelppopupTitleBarMiddle_win0" style="width:333px" class="HelppopupTitleBarMiddle" dir="ltr">
+<table>
+<tbody><tr><td id="HelppopupTitle_win0" style="width:290px; cursor: move;"><span class="PTPOPUP_TITLE">Help</span></td>
+<td style="width:45px"><img id="#HELPPOPUPCLOSE" style="cursor:pointer" title="Close" alt="Close" align="right" onclick="HelppopupObj_win0.StopPopup(&quot;win0&quot;);" src="./PT_PORTAL_IC_CLOSE_1.gif"></td>
+</tr></tbody></table>
+</div><div id="HelppopupTitleBarRightImage"></div></div><div id="HelpdivpopupFrame_win0" class="MOBGImage HelpdivpopupFrame" tabindex="-1" onclick="HelppopupObj_win0.SetFocusFlag(false);" style="border: 1px #bcbaba solid; padding:12px; overflow:auto;">test</div><div id="HelppopupShadow" class="popupShadow" style="position:absolute;z-index:-1;"><div id="HelppopupShadowTopRightCorner" class="popupShadowTopRightCorner" style="height:10px;">&nbsp;</div><div id="HelppopupShadowTop" class="popupShadowTop">&nbsp;</div><div id="HelppopupShadowBottom" class="popupShadowBottom" style="height:10px"><div id="HelppopupShadowBottomLeftCorner" class="popupShadowBottomLeftCorner" style="height:10px;width:10px">&nbsp;</div><div id="HelppopupShadowBottomMiddle" class="popupShadowBottomMiddle" style="height:10px;">&nbsp;</div><div id="HelppopupShadowBottomRightCorner" class="popupShadowBottomRightCorner" style="height:10px;width:10px">&nbsp;</div></div></div></td>
+</tr>
+</tbody></table>
+<!-- Embedded Help popup End  -->
+<div id="ptus_universalSrch" style="display:none;"><span>Default Local Node:</span><input type="text" readonly="readonly" name="ptus_defaultlocalnode" id="ptus_defaultlocalnode" value="WSQ_CAMPUS"><br><span>DbName:</span><input type="text" readonly="readonly" name="ptus_dbname" id="ptus_dbname" value="CSPROD"><br><span>Portal:</span><input type="text" readonly="readonly" name="ptus_portal" id="ptus_portal" value="EMPLOYEE"><br><span>Node:</span><input type="text" readonly="readonly" name="ptus_node" id="ptus_node" value="CSSS"><br><span>WorkCenter Id:</span><input type="text" readonly="readonly" name="ptus_workcenterid" id="ptus_workcenterid" value=""><br><span>Url:</span><input type="text" readonly="readonly" name="ptus_componenturl" id="ptus_componenturl" value="https://sis.nyu.edu/psp/csprod/EMPLOYEE/CSSS/c/SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.GBL"><br></div>
+<script language="JavaScript">
+var bCleanHtml = false;
+var bDefer = true;
+document.deferFldArr_win0 = new Array();
+document.hiddenFldArr_win0 =new Array('ICType','ICElementNum','ICStateNum','ICAction','ICXPos','ICYPos','ResponsetoDiffFrame','TargetFrameName','FacetPath','ICFocus','ICSaveWarningFilter','ICChanged','ICResubmit','ICSID','ICActionPrompt','ICFind','ICAddCount','ICAPPCLSDATA');
+document.chgFldArr_win0 = new Array();
+var bCDATA = false;
+var bLoadCompleted = true;
+</script>
+<div id="pt_console"></div></body></html>
