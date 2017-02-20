@@ -8,9 +8,8 @@ import unittest
 class TestPs2Amc(unittest.TestCase):
 
     def setUp(self):
-        self.dirname = 'ps2amc'
-        self.infile = os.path.join(self.dirname,'ps.csv')
-        self.expected_outfile = os.path.join(self.dirname,'amc.csv')
+        self.infile = os.path.join('data','ps.csv')
+        self.expected_outfile = os.path.join('golden','amc.csv')
 
     def test_ps2amc(self):
         with Popen(['ps2amc',self.infile],

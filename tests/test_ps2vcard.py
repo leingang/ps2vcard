@@ -21,17 +21,17 @@ class TestPs2Vcard(unittest.TestCase):
 
     def setUp(self):
         self.tempdir = TemporaryDirectory()
-        self.goldendir = 'golden'
+        self.goldendir = os.path.join('golden', 'ps2vcard')
+        self.input_path = os.path.join('data', 'Faculty Center.html')
 
     def test_ps2vcard(self):
         check_call([
-            'ps2vcard', '--save',
+            'ps2vcard', self.input_path, '--no-print', '--save',
             '--save-dir=%s' % self.tempdir.name
         ])
-        for filename in glob(os.path.join(self.goldendir, '*.vcf')):
-            with open(os.path.join(self.tempdir.name, basename(filename)))\
-                    as newfile,\
-                    open(filename) as goldfile:
+        for goldpath in glob(os.path.join(self.goldendir, '*.vcf')):
+            newpath = os.path.join(self.tempdir.name, basename(goldpath))
+            with open(newpath) as newfile, open(goldpath) as goldfile:
                 newcard = newfile.read()
                 goldcard = goldfile.read()
                 self.assertMultiLineEqual(newcard, goldcard)

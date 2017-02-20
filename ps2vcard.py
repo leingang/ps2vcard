@@ -49,7 +49,7 @@ class AlbertRosterFramesetParser(HTMLParser):
         log.debug("attr_dict: %s" % attr_dict)
         if (tag == 'frame' and 'name' in attr_dict and
                 attr_dict['name'] == 'TargetContent'):
-            self.roster_frame = attr_dict['src']
+            self.roster_frame = os.path.join(self.base_dir,attr_dict['src'])
             self.subparser = AlbertRosterHtmlParser()
             self.subparser.base_dir = os.path.dirname(self.roster_frame)
             self.subparser.parse(self.roster_frame)
@@ -67,6 +67,7 @@ class AlbertRosterFramesetParser(HTMLParser):
         """
         log = logging.getLogger("AlbertRosterFramesetParser.parse")
         log.debug('file: %s', infile)
+        self.base_dir = os.path.dirname(infile)
         with open(infile, 'r') as f:
             data = f.read()
             # log.debug('data: %s',data)

@@ -1,3 +1,4 @@
+# FIXME: this should probably just be a mock() method for test_ps2vcard.py
 define MOCK_SCRIPT
 import csv
 import os.path
@@ -16,7 +17,8 @@ def fix(s):
 
 students = []
 dirname = 'Faculty Center_files'
-with open('mock.csv','r') as f, open(os.path.join(dirname,'template.html'),'r') as tf:
+with open(os.path.join('data','mock.csv'),'r') as f,\
+     open(os.path.join('data',dirname,'template.html'),'r') as tf:
     t = Template(tf.read())
     for student in csv.DictReader(f):
         students.append(fix(student))
