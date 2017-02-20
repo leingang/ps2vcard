@@ -2,9 +2,10 @@
 
 import os
 import os.path
-import vobject
 import unittest
 import urllib.request
+
+import vobject
 
 
 class TestVcardPhotoSerialize(unittest.TestCase):

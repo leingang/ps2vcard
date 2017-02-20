@@ -6,8 +6,9 @@ import os.path
 from os.path import basename
 from subprocess import check_call
 from tempfile import TemporaryDirectory
-from jinja2 import Template
 import unittest
+
+from jinja2 import Template
 
 
 class TestPs2Vcard(unittest.TestCase):
