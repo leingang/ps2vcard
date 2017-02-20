@@ -15,7 +15,7 @@ class TestVcardPhotoSerialize(unittest.TestCase):
         self.card.n.value = vobject.vcard.Name(family="Thecat", given="Felix")
         self.card.add('fn')
         self.card.fn.value = "Felix Thecat"
-        self.photo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Felix_the_cat.svg/229px-Felix_the_cat.svg.png" # noqa E501
+        self.photo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Felix_the_cat.svg/229px-Felix_the_cat.svg.png"  # noqa E501
         self.photo_path = os.path.join('data', 'felix-229.png')
         if not os.path.isfile(self.photo_path):
             urllib.request.urlretrieve(self.photo_url, self.photo_path)
