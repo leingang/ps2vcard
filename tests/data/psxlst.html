@@ -1,0 +1,29 @@
+{#-
+    This is a template to mock a `ps.xls` file downloaded from Albert.
+    The `ps` stands for PeopleSoft, I think.
+    Despite the extension, it is NOT an Excel file.  Instead, it is an
+    (ill-formed) HTML file with a single table in it.
+
+#}<html dir='ltr' lang='en'>
+<!-- Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved. -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><body><table border='1' cellpadding='3' cellspacing='0'>
+<tr>
+<th>Notify</th><th>Photo</th><th>Campus ID</th><th>Name</th><th>Email Address</th><th>Telephone</th><th>Units</th><th>Program and Plan</th><th>Level</th><th>Subject</th><th>Catalog</th><th>Section</th><th>Advising Alert</th></tr>
+{%- for student in students %}
+<tr>
+<td></td>
+<td>Photo</td>
+<td>{{ student['Campus ID'] }}</td>
+<td>{{ student['Name'] }}</td>
+<td>{{ student['Email Address']}}</td>
+<td>=&quot;{{ student['Phone'] }}&quot;</td>
+<td>4.00</td>
+<td>{{ student['Program and Plan']|e }}</td>
+<td>Freshman</td>
+<td>MATH-UA</td>
+<td> 122</td>
+<td>005</td>
+<td>Alert Advisor</td>
+{#- indeed, no end tr element #}
+{%- endfor %}
+</table></body></html>
