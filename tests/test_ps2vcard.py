@@ -31,10 +31,10 @@ class TestPs2Vcard(unittest.TestCase):
         on the command line.
         """
         dirname = 'Faculty Center_files'
-        input_path = os.path.join('data', 'mock.csv')
-        template_path = os.path.join('data', dirname, 'template.html')
+        input_path = os.path.join(self.data_path, 'mock.csv')
+        template_path = os.path.join(self.data_path, dirname, 'template.html')
         output_path = os.path.join(
-            'data', dirname, 'SA_LEARNING_MANAGEMENT.SS_FACULTY.html')
+            self.data_path, dirname, 'SA_LEARNING_MANAGEMENT.SS_FACULTY.html')
 
         def fix(s):
             """fix up the student record for templating"""
@@ -53,16 +53,18 @@ class TestPs2Vcard(unittest.TestCase):
         self.assertTrue(os.path.exists(output_path))
 
     def setUp(self):
+        self._dir = os.path.dirname(__file__)
+        self.data_path = os.path.join(self._dir,'data')
+        self.golden_path = os.path.join(self._dir,'golden','ps2vcard')
         self.tempdir = TemporaryDirectory()
-        self.goldendir = os.path.join('golden', 'ps2vcard')
-        self.input_path = os.path.join('data', 'Faculty Center.html')
+        self.input_path = os.path.join(self.data_path, 'Faculty Center.html')
 
     def test_ps2vcard(self):
         check_call([
             'ps2vcard', self.input_path, '--no-print', '--save',
             '--save-dir=%s' % self.tempdir.name
         ])
-        for goldpath in glob(os.path.join(self.goldendir, '*.vcf')):
+        for goldpath in glob(os.path.join(self.golden_path, '*.vcf')):
             newpath = os.path.join(self.tempdir.name, basename(goldpath))
             self.assertTrue(os.path.exists(newpath))
             with open(newpath) as newfile, open(goldpath) as goldfile:
