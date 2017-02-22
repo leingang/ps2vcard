@@ -54,8 +54,8 @@ class TestPs2Vcard(unittest.TestCase):
 
     def setUp(self):
         self._dir = os.path.dirname(__file__)
-        self.data_path = os.path.join(self._dir,'data')
-        self.golden_path = os.path.join(self._dir,'golden','ps2vcard')
+        self.data_path = os.path.join(self._dir, 'data')
+        self.golden_path = os.path.join(self._dir, 'golden', 'ps2vcard')
         self.tempdir = TemporaryDirectory()
         self.input_path = os.path.join(self.data_path, 'Faculty Center.html')
 

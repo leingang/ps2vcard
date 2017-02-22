@@ -9,7 +9,6 @@ installation instructions.
 .. _vobject: http://eventable.github.io/vobject/
 """
 
-import click
 import csv
 from collections import defaultdict
 from html.parser import HTMLParser
@@ -18,9 +17,13 @@ import logging
 import os
 import re
 import sys
+
+from bs4 import BeautifulSoup
+import click
 from transitions import Machine, logger  # noqa: F401
 from transitions.core import MachineError
 import vobject
+
 
 def unpack_progplan(progplan):
     """unpack a `progplan` string into program and plan.
@@ -29,6 +32,7 @@ def unpack_progplan(progplan):
     ['UA-Coll of Arts & Sci','Undecided']
     """
     return progplan.split(' - \n\n')
+
 
 class AlbertRosterFramesetParser(HTMLParser):
 
@@ -49,7 +53,7 @@ class AlbertRosterFramesetParser(HTMLParser):
         log.debug("attr_dict: %s" % attr_dict)
         if (tag == 'frame' and 'name' in attr_dict and
                 attr_dict['name'] == 'TargetContent'):
-            self.roster_frame = os.path.join(self.base_dir,attr_dict['src'])
+            self.roster_frame = os.path.join(self.base_dir, attr_dict['src'])
             self.subparser = AlbertRosterHtmlParser()
             self.subparser.base_dir = os.path.dirname(self.roster_frame)
             self.subparser.parse(self.roster_frame)
@@ -73,6 +77,7 @@ class AlbertRosterFramesetParser(HTMLParser):
             # log.debug('data: %s',data)
             self.feed(data)
         return (self.subparser.course_data, self.subparser.student_vcards)
+
 
 class AlbertRosterHtmlParser(HTMLParser, Machine):
     student_keys_dict = {
@@ -130,7 +135,7 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
         #  5. After making the transition, execute `cleanup_unpack_element`
         #     This just removes the properties instantiated by `unpack_element`
         #
-        #  6. Once in state `found_course_key`, all other attrivutes will
+        #  6. Once in state `found_course_key`, all other attributes will
         #     impotently transition from that state back to itself.
         #     This avoids an error that was caused by multiple attributes
         #     (`id` and `name`) having the same key as their attribute value.
@@ -397,14 +402,81 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
             .value = course['code'] + ", " + course['term']
         return card
 
+
+class AlbertRosterXlsParser(object):
+    """Class to parse the `ps.xls` file downloaded from Albert"""
+
+    def parse(self, input_path):
+        logger = logging.getLogger('AlbertRosterXlsParser.parse')
+        logger.info('begin')
+        with open(input_path) as f:
+            html = f.read()
+        cards = []
+        bs = BeautifulSoup(html, 'lxml')
+        headers = [e.contents[0] for e in bs.find_all('th')]
+        # logger.info('headers: %s',repr(headers))
+        for row in bs('tr'):
+            cells = row.find_all('td')
+            if cells == []:
+                continue
+            cell_contents = [''.join(cell.contents) for cell in cells]
+            student = dict(zip(headers, cell_contents))
+            cards.append(self.student_to_vcard(student))
+        logger.info('end')
+        return None, cards
+
+    def student_to_vcard(self, student, course=None):
+        """convert a single student record to a vCard object."""
+        # This seems pretty similar to AlbertRosterHtmlParser.student_to_vcard,
+        # with some dict keys changed.
+        # Maybe refactor?
+        if course is None:
+            course = {}
+        course['org'] = 'New York University'
+        card = vobject.vCard()
+        # first and last names
+        try:
+            (family_name, given_names) = student['Name'].split(',')
+        except TypeError:
+            logger.error("student['Name']: %s", student['Name'])
+            raise
+        card.add('n')
+        card.n.value = vobject.vcard.Name(
+            family=family_name, given=given_names)
+        # full name
+        card.add('fn')
+        card.fn.value = "%s %s" % (given_names, family_name)
+        # email
+        card.add('email')
+        card.email.value = student['Email Address']
+        card.email.type_param = 'INTERNET'
+        # student info
+        card.add('title').value = "Student"
+        (student_program, student_plan) \
+            = unpack_progplan(student['Program and Plan'])
+        card.add('org').value = [course['org'], student_program]
+        card.add('X-NYU-PROGPLAN').value \
+            = ' - '.join([student_program, student_plan])
+        card.add('X-NYU-NNUMBER').value = student['Campus ID']
+        # course (use address book's "Related Names" fields)
+        item = 'item1'
+        card.add(item + '.X-ABLABEL').value = "course"
+        card.add(item + '.X-ABRELATEDNAMES')\
+            .value = "%s %d - %03d" % (
+                student['Subject'],
+                int(student['Catalog']),
+                int(student['Section']))
+        return card
+
+
 class AlbertRosterCsvParser(object):
     """Class to parse CSV files downloaded from Albert"""
 
-    def student_to_vcard(student,course):
+    def student_to_vcard(student, course):
         """convert a single student dictionary to a vCard."""
         card = vobject.vCard()
         course['org'] = "New York University"
-        (family_name,given_names) = student['Name'].split(',')
+        (family_name, given_names) = student['Name'].split(',')
         card.add('n').value = vobject.vcard.Name(
             family=family_name, given=given_names)
         # full name
@@ -430,7 +502,7 @@ class AlbertRosterCsvParser(object):
                 int(student['Section']))
         return card
 
-    def parse(self,input_file):
+    def parse(self, input_file):
         """parse an Albert Class Roster frame CSV file
         for course and student information
 
@@ -500,8 +572,7 @@ class AmcCsvWriter(csv.DictWriter):
         self.writeheader()
         for student in students:
             (email_localpart, domain) = student['Email Address'].split('@')
-            (family_name,given_names) = student['Name'].split(',')
-
+            (family_name, given_names) = student['Name'].split(',')
             try:
                 row = {
                     'Campus ID': student['Campus ID'],
@@ -516,6 +587,46 @@ class AmcCsvWriter(csv.DictWriter):
                 logging.error('student: %s', repr(student))
                 raise
             self.writerow(row)
+
+
+class VcardAmcCsvWriter(csv.DictWriter):
+    """Class to write a list of student vCards to a CSV file suitable for
+    importing into auto-multiple-choice
+    """
+
+    fieldnames = [
+        'Campus ID',  # N Number
+        'surname',
+        'name',  # given names
+        'NetID',
+        'email',  # NetID@nyu.edu
+        'id'  # N Number with no N
+    ]
+
+    def __init__(self, csvfile, restval='',
+                 extrasaction='raise', dialect='excel', *args, **kwds):
+        # don't know how to pass the other keyword arguments...
+        super().__init__(csvfile, fieldnames=self.fieldnames)
+
+    def write(self, students):
+        self.writeheader()
+        for student in students:
+            (email_localpart, domain) = student.email.value.split('@')
+            try:
+                row = {
+                    'Campus ID': student.x_nyu_nnumber.value,
+                    'surname': student.n.value.family,
+                    'name': student.n.value.given,
+                    'NetID': email_localpart,
+                    'email': student.email.value,
+                    'id': student.x_nyu_nnumber.value.replace('N', '')
+                }
+            except:
+                # debugging
+                logging.error('student: %s', repr(student))
+                raise
+            self.writerow(row)
+
 
 # Here begin the scripts
 @click.command()
@@ -676,23 +787,55 @@ def convert_to_anki(infile, verbose, debug, save_dir):
 @click.option('--debug', is_flag=True, default=False,
               help='show debugging statements')
 @click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout,
-              metavar='FILE',help='write to FILE (default: stdout)'
-)
+              metavar='FILE', help='write to FILE (default: stdout)'
+              )
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
 def convert_to_amccsv(infile, verbose, debug, outfile):
     """Process a CSV roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
 
+    Except, there's no such thing as a CSV roster downloaded from Albert.
+    Albert sends an html file disguised as an excel file.
+
+    See `convert_xls_to_amccsv`.
     """
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_to_amccsv')
     log.info('begin')
-    parser = AlbertRosterFramesetParser()
     with open(infile) as f:
-        students=csv.DictReader(f)
+        students = csv.DictReader(f)
         writer = AmcCsvWriter(outfile)
         writer.write(students)
     log.info('end')
+
+
+def set_loglevel(context, parameter, value):
+    if value is None:
+        value = logging.WARNING
+    logging.basicConfig(level=value)
+
+
+@click.command()
+@click.option('--verbose', 'loglevel', flag_value=logging.INFO,
+              help='be verbose')
+@click.option('--debug', 'loglevel', flag_value=logging.DEBUG,
+              callback=set_loglevel,
+              help='show debugging statements')
+@click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout,
+              metavar='FILE', help='write to FILE (default: stdout)')
+@click.argument('infile', metavar='FILE', type=click.Path(exists=True),
+                default='ps.csv')
+def convert_xls_to_amccsv(infile, loglevel, outfile):
+    """Process an XLS roster downloaded from Albert and generate a CSV file
+    suitable for importing to auto-multiple-choice.
+
+    """
+    logger = logging.getLogger(os.path.basename(sys.argv[0]))
+    logger.info('begin')
+    parser = AlbertRosterXlsParser()
+    (course, students) = parser.parse(infile)
+    VcardAmcCsvWriter(outfile).write(students)
+    logger.info('end')

@@ -12,10 +12,10 @@ class TestPs2Amc(unittest.TestCase):
 
     def setUp(self):
         self._dir = os.path.dirname(__file__)
-        self.data_path = os.path.join(self._dir,'data')
-        self.golden_path = os.path.join(self._dir,'golden')
+        self.data_path = os.path.join(self._dir, 'data')
+        self.golden_path = os.path.join(self._dir, 'golden')
         self.infile = os.path.join(self.data_path, 'ps.csv')
-        self.inxlspath = os.path.join(self.data_path,'ps.xls')
+        self.inxlspath = os.path.join(self.data_path, 'ps.xls')
         self.expected_outfile = os.path.join(self.golden_path, 'amc.csv')
 
     def mock_psxls(self):
@@ -32,9 +32,15 @@ class TestPs2Amc(unittest.TestCase):
         input_path = os.path.join(self.data_path, 'mock.csv')
         template_path = os.path.join(self.data_path, 'psxlst.html')
         output_path = os.path.join(self.data_path, 'ps.xls')
+
+        def fix(s):
+            s['Program and Plan'] \
+                = s['Program and Plan'].replace('\\n\\n', '\n\r')
+            return s
+
         with open(input_path) as data_fh, open(template_path) as template_fh:
             template = Template(template_fh.read())
-            students = [student for student in csv.DictReader(data_fh)]
+            students = [fix(student) for student in csv.DictReader(data_fh)]
         with open(output_path, 'w') as output_fh:
             output_fh.write(template.render(students=students))
         self.assertTrue(os.path.exists(output_path))
@@ -75,6 +81,7 @@ class TestPs2Amc(unittest.TestCase):
             for expected_line in expected_output:
                 line = output.readline()
                 self.assertEqual(line, expected_line)
+
 
 if __name__ == '__main__':
     unittest.main()

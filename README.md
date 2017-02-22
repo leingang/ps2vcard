@@ -10,7 +10,8 @@ Requirements
 
 * vobject (version?)
 * jinja2 (2.9.5) is used for test generation
-
+* beautifulsoup4>=4.5.3
+* lxml>=3.7.3
 
 Installation
 ------------

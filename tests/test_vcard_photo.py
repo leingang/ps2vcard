@@ -12,8 +12,8 @@ class TestVcardPhotoSerialize(unittest.TestCase):
 
     def setUp(self):
         self._dir = os.path.dirname(__file__)
-        self.data_path = os.path.join(self._dir,'data')
-        self.golden_path = os.path.join(self._dir,'golden')
+        self.data_path = os.path.join(self._dir, 'data')
+        self.golden_path = os.path.join(self._dir, 'golden')
         self.card = vobject.vCard()
         self.card.add('n')
         self.card.n.value = vobject.vcard.Name(family="Thecat", given="Felix")
