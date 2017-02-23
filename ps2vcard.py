@@ -11,6 +11,7 @@ installation instructions.
 
 import csv
 from collections import defaultdict
+from functools import wraps
 from html.parser import HTMLParser
 from html.entities import entitydefs
 import logging
@@ -23,6 +24,23 @@ import click
 from transitions import Machine, logger  # noqa: F401
 from transitions.core import MachineError
 import vobject
+
+
+def log_begin(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        logging.getLogger(f.__name__).info("begin")
+        return f(*args, **kwds)
+    return wrapper
+
+
+def log_end(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        res = f(*args, **kwds)
+        logging.getLogger(f.__name__).info("end")
+        return res
+    return wrapper
 
 
 def unpack_progplan(progplan):
@@ -406,9 +424,9 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
 class AlbertRosterXlsParser(object):
     """Class to parse the `ps.xls` file downloaded from Albert"""
 
+    @log_begin
+    @log_end
     def parse(self, input_path):
-        logger = logging.getLogger('AlbertRosterXlsParser.parse')
-        logger.info('begin')
         with open(input_path) as f:
             html = f.read()
         cards = []
@@ -422,7 +440,6 @@ class AlbertRosterXlsParser(object):
             cell_contents = [''.join(cell.contents) for cell in cells]
             student = dict(zip(headers, cell_contents))
             cards.append(self.student_to_vcard(student))
-        logger.info('end')
         return None, cards
 
     def student_to_vcard(self, student, course=None):
@@ -692,6 +709,8 @@ def convert_all(infile, verbose, debug, save, pprint):
               help='pretty-print vCards to standard output')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='Faculty Center.html')
+@log_begin
+@log_end
 def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     """Process a roster downloaded from Albert and generate vCards
 
@@ -721,20 +740,18 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_all_from_frameset')
-    log.info('begin')
     parser = AlbertRosterFramesetParser()
     (course, students) = parser.parse(infile)
     # logging.debug('students: %s',repr(students))
     # course info
-    logging.debug('course: %s', repr(course))
-    logging.debug('students: %s', repr(students))
+    log.debug('course: %s', repr(course))
+    log.debug('students: %s', repr(students))
     writer = VcardWriter(dirname=save_dir)
     for card in students:
         if pprint:
             card.prettyPrint()
         if save:
             writer.write(card)
-    log.info('end')
 
 
 @click.command()
@@ -791,6 +808,8 @@ def convert_to_anki(infile, verbose, debug, save_dir):
               )
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
+@log_begin
+@log_end
 def convert_to_amccsv(infile, verbose, debug, outfile):
     """Process a CSV roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
@@ -803,13 +822,10 @@ def convert_to_amccsv(infile, verbose, debug, outfile):
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
-    log = logging.getLogger('convert_to_amccsv')
-    log.info('begin')
     with open(infile) as f:
         students = csv.DictReader(f)
         writer = AmcCsvWriter(outfile)
         writer.write(students)
-    log.info('end')
 
 
 def set_loglevel(context, parameter, value):
@@ -828,14 +844,13 @@ def set_loglevel(context, parameter, value):
               metavar='FILE', help='write to FILE (default: stdout)')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
+@log_begin
+@log_end
 def convert_xls_to_amccsv(infile, loglevel, outfile):
     """Process an XLS roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
 
     """
-    logger = logging.getLogger(os.path.basename(sys.argv[0]))
-    logger.info('begin')
     parser = AlbertRosterXlsParser()
     (course, students) = parser.parse(infile)
     VcardAmcCsvWriter(outfile).write(students)
-    logger.info('end')
