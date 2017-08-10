@@ -64,12 +64,10 @@ class AlbertRosterFramesetParser(HTMLParser):
         log.debug("attrs: %s" % attrs)
         if self.roster_frame:
             return
-        attr_dict = {}
-        # must be a better way...
-        for (name, value) in attrs:
-            attr_dict[name] = value
+        attr_dict = dict(attrs)
         log.debug("attr_dict: %s" % attr_dict)
-        if (tag == 'frame' and 'name' in attr_dict and
+        if ((tag == 'frame' or tag == 'iframe') and
+                'name' in attr_dict and
                 attr_dict['name'] == 'TargetContent'):
             self.roster_frame = os.path.join(self.base_dir, attr_dict['src'])
             self.subparser = AlbertRosterHtmlParser()
