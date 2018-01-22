@@ -114,7 +114,7 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
         'MTG_LOC$0': 'room',
         'MTG_DATE$0': 'dates'
     }
-    photo_key = 'win0divEMPL_PHOTO_EMPLOYEE_PHOTO'
+    photo_key = 'win10divEMPL_PHOTO_EMPLOYEE_PHOTO'
 
     def __init__(self):
         self.course_data = defaultdict(dict)
@@ -361,13 +361,14 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
         self.data = ""
 
     def parse(self, file):
-        """parse an Albert Class Roster frame HTML file
+        """parse an Albert Class Roster HTML file
         for course and student information
 
         Return a tuple `(course,students)`, where `course` is a dictionary
         of course (i.e., section) properties, and `students` is a list of
         dictionaries of student properties.
         """
+        self.base_dir = os.path.dirname(file)
         with open(file, 'r') as f:
             data = f.read()
             self.feed(data)
@@ -649,15 +650,15 @@ class VcardAmcCsvWriter(csv.DictWriter):
 @click.option('--debug', is_flag=True, default=False,
               help='show debugging statements')
 @click.option('--save', is_flag=True, default=False, help='save vCards')
-@click.option('--print', 'pprint', is_flag=True, default=True,
+@click.option('--print/--no-print', 'pprint', default=True,
               help='pretty-print vCards')
 @click.argument('infile', metavar='FILE',
-                default='SA_LEARNING_MANAGEMENT.SS_FACULTY.html')
+                default='Access Class Rosters.html')
 def convert_all(infile, verbose, debug, save, pprint):
     """
     Process a roster downloaded from Albert and generate vCards
 
-    DEPRECATED.  Use the version that parses the frameset file first.
+    Formerly Deprecated in favor of a frameset, but now we're back to this. 
 
     To create the source file:
 
@@ -670,9 +671,9 @@ def convert_all(infile, verbose, debug, save, pprint):
       * save this page, including the frames and photos.  In Chrome, use
         the "Webpage, complete" option when saving to do this.
 
-      * change to the created directory (it will likely end in `_files`) and
+      * change to the download directory and
         locate the roster file. It will probably be called
-        "SA_LEARNING_MANAGEMENT.SS_CLASS_ROSTER.html"
+        "Access Class Rosters.html"
 
     Then run this script on that file.  You won't get any vCards saved without
     the --save option, though.
@@ -706,7 +707,7 @@ def convert_all(infile, verbose, debug, save, pprint):
 @click.option('--print/--no-print', 'pprint', is_flag=True, default=True,
               help='pretty-print vCards to standard output')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
-                default='Faculty Center.html')
+                default='Access Class Rosters.html')
 @log_begin
 @log_end
 def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
@@ -723,12 +724,11 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
       * save this page, including the frames and photos.  In Chrome, use
         the "Webpage, complete" option when saving to do this.
 
-      * change to the download directory (it will likely end in `_files`)
-        and locate the HTML file.  It will probably be called
-        `Faculty Center.html` and have an accompanying directory
-        `Faculty Center_files`.
+      * change to the download directory and locate the HTML file.  It will
+        probably be called `Access Class Rosters.html` and have an accompanying 
+        directory `Access Class Rosters_files`.
 
-      * Run this script on that file.
+      * Run this script on that html file.
 
     To save vCards, use the --save option.
 
@@ -760,7 +760,7 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
               help='save images to this directory ' +
                    '(default: current directory)')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
-                default='Faculty Center.html')
+                default='Access Class Rosters.html')
 def convert_to_anki(infile, verbose, debug, save_dir):
     """Process a roster downloaded from Albert and generate a set
     of image files with student names.  These files can be imported to Anki

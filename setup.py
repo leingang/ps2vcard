@@ -9,8 +9,8 @@ setup(
     install_requires=['Click', 'vobject', 'transitions'],
     entry_points="""
         [console_scripts]
-        ps2vcard-old=ps2vcard:convert_all
-        ps2vcard=ps2vcard:convert_all_from_frameset
+        ps2vcard=ps2vcard:convert_all
+        ps2vcard-old=ps2vcard:convert_all_from_frameset
         ps2anki=ps2vcard:convert_to_anki
         ps2amc=ps2vcard:convert_to_amccsv
         psxls2amc=ps2vcard:convert_xls_to_amccsv
