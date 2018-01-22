@@ -4,11 +4,11 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-AlbertRosterCsvParser	../ps2vcard.py	/^class AlbertRosterCsvParser(object):$/;"	kind:class	line:489
+AlbertRosterCsvParser	../ps2vcard.py	/^class AlbertRosterCsvParser(object):$/;"	kind:class	line:487
 AlbertRosterFramesetParser	../ps2vcard.py	/^class AlbertRosterFramesetParser(HTMLParser):$/;"	kind:class	line:55
-AlbertRosterHtmlParser	../ps2vcard.py	/^class AlbertRosterHtmlParser(HTMLParser, Machine):$/;"	kind:class	line:100
-AlbertRosterXlsParser	../ps2vcard.py	/^class AlbertRosterXlsParser(object):$/;"	kind:class	line:424
-AmcCsvWriter	../ps2vcard.py	/^class AmcCsvWriter(csv.DictWriter):$/;"	kind:class	line:570
+AlbertRosterHtmlParser	../ps2vcard.py	/^class AlbertRosterHtmlParser(HTMLParser, Machine):$/;"	kind:class	line:98
+AlbertRosterXlsParser	../ps2vcard.py	/^class AlbertRosterXlsParser(object):$/;"	kind:class	line:422
+AmcCsvWriter	../ps2vcard.py	/^class AmcCsvWriter(csv.DictWriter):$/;"	kind:class	line:568
 BeautifulSoup	../ps2vcard.py	/^from bs4 import BeautifulSoup$/;"	kind:namespace	line:22
 F401	../ps2vcard.py	/^from transitions import Machine, logger  # noqa: F401$/;"	kind:namespace	line:24
 HTMLParser	../ps2vcard.py	/^from html.parser import HTMLParser$/;"	kind:namespace	line:15
@@ -22,68 +22,68 @@ TemporaryDirectory	../tests/test_ps2vcard.py	/^from tempfile import TemporaryDir
 TestPs2Amc	../tests/test_ps2amc.py	/^class TestPs2Amc(unittest.TestCase):$/;"	kind:class	line:11
 TestPs2Vcard	../tests/test_ps2vcard.py	/^class TestPs2Vcard(unittest.TestCase):$/;"	kind:class	line:14
 TestVcardPhotoSerialize	../tests/test_vcard_photo.py	/^class TestVcardPhotoSerialize(unittest.TestCase):$/;"	kind:class	line:11
-VcardAmcCsvWriter	../ps2vcard.py	/^class VcardAmcCsvWriter(csv.DictWriter):$/;"	kind:class	line:609
-VcardWriter	../ps2vcard.py	/^class VcardWriter(object):$/;"	kind:class	line:539
-__init__	../ps2vcard.py	/^    def __init__(self):$/;"	kind:member	line:121
+VcardAmcCsvWriter	../ps2vcard.py	/^class VcardAmcCsvWriter(csv.DictWriter):$/;"	kind:class	line:607
+VcardWriter	../ps2vcard.py	/^class VcardWriter(object):$/;"	kind:class	line:537
+__init__	../ps2vcard.py	/^    def __init__(self):$/;"	kind:member	line:119
 __init__	../ps2vcard.py	/^    def __init__(self):$/;"	kind:member	line:57
-__init__	../ps2vcard.py	/^    def __init__(self, csvfile, restval='',$/;"	kind:member	line:583
-__init__	../ps2vcard.py	/^    def __init__(self, csvfile, restval='',$/;"	kind:member	line:623
-__init__	../ps2vcard.py	/^    def __init__(self, dirname=None):$/;"	kind:member	line:543
-_name	../ps2vcard.py	/^    _name = 'VcardWriter'$/;"	kind:variable	line:541
-attr_is_course_key	../ps2vcard.py	/^    def attr_is_course_key(self, tag, attr):$/;"	kind:member	line:259
-attr_is_student_key	../ps2vcard.py	/^    def attr_is_student_key(self, tag, attr):$/;"	kind:member	line:270
+__init__	../ps2vcard.py	/^    def __init__(self, csvfile, restval='',$/;"	kind:member	line:581
+__init__	../ps2vcard.py	/^    def __init__(self, csvfile, restval='',$/;"	kind:member	line:621
+__init__	../ps2vcard.py	/^    def __init__(self, dirname=None):$/;"	kind:member	line:541
+_name	../ps2vcard.py	/^    _name = 'VcardWriter'$/;"	kind:variable	line:539
+attr_is_course_key	../ps2vcard.py	/^    def attr_is_course_key(self, tag, attr):$/;"	kind:member	line:257
+attr_is_student_key	../ps2vcard.py	/^    def attr_is_student_key(self, tag, attr):$/;"	kind:member	line:268
 basename	../tests/test_ps2vcard.py	/^from os.path import basename$/;"	kind:namespace	line:6
-buffer_data	../ps2vcard.py	/^    def buffer_data(self, data):$/;"	kind:member	line:312
-buffer_translated_entityref	../ps2vcard.py	/^    def buffer_translated_entityref(self, name):$/;"	kind:member	line:325
-callback	../ps2vcard.py	/^              callback=set_loglevel,$/;"	kind:variable	line:841
-capture_course_data	../ps2vcard.py	/^    def capture_course_data(self):$/;"	kind:member	line:334
-capture_student_data	../ps2vcard.py	/^    def capture_student_data(self):$/;"	kind:member	line:337
-card_file_name	../ps2vcard.py	/^    def card_file_name(self, card):$/;"	kind:member	line:561
+buffer_data	../ps2vcard.py	/^    def buffer_data(self, data):$/;"	kind:member	line:310
+buffer_translated_entityref	../ps2vcard.py	/^    def buffer_translated_entityref(self, name):$/;"	kind:member	line:323
+callback	../ps2vcard.py	/^              callback=set_loglevel,$/;"	kind:variable	line:839
+capture_course_data	../ps2vcard.py	/^    def capture_course_data(self):$/;"	kind:member	line:332
+capture_student_data	../ps2vcard.py	/^    def capture_student_data(self):$/;"	kind:member	line:335
+card_file_name	../ps2vcard.py	/^    def card_file_name(self, card):$/;"	kind:member	line:559
 check_call	../tests/test_ps2vcard.py	/^from subprocess import check_call$/;"	kind:namespace	line:7
-cleanup_unpack_element	../ps2vcard.py	/^    def cleanup_unpack_element(self, tag, attr):$/;"	kind:member	line:255
+cleanup_unpack_element	../ps2vcard.py	/^    def cleanup_unpack_element(self, tag, attr):$/;"	kind:member	line:253
 click	../ps2vcard.py	/^import click$/;"	kind:namespace	line:23
-convert_all	../ps2vcard.py	/^def convert_all(infile, verbose, debug, save, pprint):$/;"	kind:function	line:658
-convert_all_from_frameset	../ps2vcard.py	/^def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):$/;"	kind:function	line:714
-convert_to_amccsv	../ps2vcard.py	/^def convert_to_amccsv(infile, verbose, debug, outfile):$/;"	kind:function	line:813
-convert_to_anki	../ps2vcard.py	/^def convert_to_anki(infile, verbose, debug, save_dir):$/;"	kind:function	line:766
-convert_xls_to_amccsv	../ps2vcard.py	/^def convert_xls_to_amccsv(infile, loglevel, outfile):$/;"	kind:function	line:849
-course_keys_dict	../ps2vcard.py	/^    course_keys_dict = {$/;"	kind:variable	line:110
+convert_all	../ps2vcard.py	/^def convert_all(infile, verbose, debug, save, pprint):$/;"	kind:function	line:656
+convert_all_from_frameset	../ps2vcard.py	/^def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):$/;"	kind:function	line:712
+convert_to_amccsv	../ps2vcard.py	/^def convert_to_amccsv(infile, verbose, debug, outfile):$/;"	kind:function	line:811
+convert_to_anki	../ps2vcard.py	/^def convert_to_anki(infile, verbose, debug, save_dir):$/;"	kind:function	line:764
+convert_xls_to_amccsv	../ps2vcard.py	/^def convert_xls_to_amccsv(infile, loglevel, outfile):$/;"	kind:function	line:847
+course_keys_dict	../ps2vcard.py	/^    course_keys_dict = {$/;"	kind:variable	line:108
 csv	../ps2vcard.py	/^import csv$/;"	kind:namespace	line:12
 csv	../tests/test_ps2amc.py	/^import csv$/;"	kind:namespace	line:3
 csv	../tests/test_ps2vcard.py	/^import csv$/;"	kind:namespace	line:3
-default	../ps2vcard.py	/^                default='Faculty Center.html')$/;"	kind:variable	line:711
-default	../ps2vcard.py	/^                default='Faculty Center.html')$/;"	kind:variable	line:765
-default	../ps2vcard.py	/^                default='ps.csv')$/;"	kind:variable	line:810
-default	../ps2vcard.py	/^                default='ps.csv')$/;"	kind:variable	line:846
+default	../ps2vcard.py	/^                default='Faculty Center.html')$/;"	kind:variable	line:709
+default	../ps2vcard.py	/^                default='Faculty Center.html')$/;"	kind:variable	line:763
+default	../ps2vcard.py	/^                default='ps.csv')$/;"	kind:variable	line:808
+default	../ps2vcard.py	/^                default='ps.csv')$/;"	kind:variable	line:844
 defaultdict	../ps2vcard.py	/^from collections import defaultdict$/;"	kind:namespace	line:13
 entitydefs	../ps2vcard.py	/^from html.entities import entitydefs$/;"	kind:namespace	line:16
-fieldnames	../ps2vcard.py	/^    fieldnames = [$/;"	kind:variable	line:574
-fieldnames	../ps2vcard.py	/^    fieldnames = [$/;"	kind:variable	line:614
+fieldnames	../ps2vcard.py	/^    fieldnames = [$/;"	kind:variable	line:572
+fieldnames	../ps2vcard.py	/^    fieldnames = [$/;"	kind:variable	line:612
 fix	../tests/test_ps2amc.py	/^        def fix(s):$/;"	kind:function	line:36
 fix	../tests/test_ps2vcard.py	/^        def fix(s):$/;"	kind:function	line:39
-found_img_src	../ps2vcard.py	/^    def found_img_src(self, tag, attr):$/;"	kind:member	line:288
-found_photo_key	../ps2vcard.py	/^    def found_photo_key(self, tag, attr):$/;"	kind:member	line:280
+found_img_src	../ps2vcard.py	/^    def found_img_src(self, tag, attr):$/;"	kind:member	line:286
+found_photo_key	../ps2vcard.py	/^    def found_photo_key(self, tag, attr):$/;"	kind:member	line:278
 glob	../tests/test_ps2vcard.py	/^from glob import glob$/;"	kind:namespace	line:4
-handle_charref	../ps2vcard.py	/^    def handle_charref(self, name):$/;"	kind:member	line:315
-handle_course_key	../ps2vcard.py	/^    def handle_course_key(self, tag, attr):$/;"	kind:member	line:266
-handle_data	../ps2vcard.py	/^    def handle_data(self, data):$/;"	kind:member	line:309
-handle_endtag	../ps2vcard.py	/^    def handle_endtag(self, tag):$/;"	kind:member	line:331
-handle_entityref	../ps2vcard.py	/^    def handle_entityref(self, name):$/;"	kind:member	line:318
-handle_img_src	../ps2vcard.py	/^    def handle_img_src(self, tag, attr):$/;"	kind:member	line:291
-handle_photo_key	../ps2vcard.py	/^    def handle_photo_key(self, tag, attr):$/;"	kind:member	line:285
-handle_starttag	../ps2vcard.py	/^    def handle_starttag(self, tag, attrs):$/;"	kind:member	line:297
+handle_charref	../ps2vcard.py	/^    def handle_charref(self, name):$/;"	kind:member	line:313
+handle_course_key	../ps2vcard.py	/^    def handle_course_key(self, tag, attr):$/;"	kind:member	line:264
+handle_data	../ps2vcard.py	/^    def handle_data(self, data):$/;"	kind:member	line:307
+handle_endtag	../ps2vcard.py	/^    def handle_endtag(self, tag):$/;"	kind:member	line:329
+handle_entityref	../ps2vcard.py	/^    def handle_entityref(self, name):$/;"	kind:member	line:316
+handle_img_src	../ps2vcard.py	/^    def handle_img_src(self, tag, attr):$/;"	kind:member	line:289
+handle_photo_key	../ps2vcard.py	/^    def handle_photo_key(self, tag, attr):$/;"	kind:member	line:283
+handle_starttag	../ps2vcard.py	/^    def handle_starttag(self, tag, attrs):$/;"	kind:member	line:295
 handle_starttag	../ps2vcard.py	/^    def handle_starttag(self, tag, attrs):$/;"	kind:member	line:61
-handle_student_key	../ps2vcard.py	/^    def handle_student_key(self, tag, attr):$/;"	kind:member	line:275
-help	../ps2vcard.py	/^              help='be verbose')$/;"	kind:variable	line:839
-help	../ps2vcard.py	/^              help='pretty-print vCards to standard output')$/;"	kind:variable	line:709
-help	../ps2vcard.py	/^              help='save images to this directory ' +$/;"	kind:variable	line:762
-help	../ps2vcard.py	/^              help='save vCards to this directory ' +$/;"	kind:variable	line:706
-help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:703
-help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:760
-help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:805
-help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:842
+handle_student_key	../ps2vcard.py	/^    def handle_student_key(self, tag, attr):$/;"	kind:member	line:273
+help	../ps2vcard.py	/^              help='be verbose')$/;"	kind:variable	line:837
+help	../ps2vcard.py	/^              help='pretty-print vCards to standard output')$/;"	kind:variable	line:707
+help	../ps2vcard.py	/^              help='save images to this directory ' +$/;"	kind:variable	line:760
+help	../ps2vcard.py	/^              help='save vCards to this directory ' +$/;"	kind:variable	line:704
+help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:701
+help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:758
+help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:803
+help	../ps2vcard.py	/^              help='show debugging statements')$/;"	kind:variable	line:840
 install_requires	../setup.py	/^    install_requires=['Click', 'vobject', 'transitions'],$/;"	kind:variable	line:9
-key_is_course_description	../ps2vcard.py	/^    def key_is_course_description(self):$/;"	kind:member	line:340
+key_is_course_description	../ps2vcard.py	/^    def key_is_course_description(self):$/;"	kind:member	line:338
 log_begin	../ps2vcard.py	/^def log_begin(f):$/;"	kind:function	line:29
 log_end	../ps2vcard.py	/^def log_end(f):$/;"	kind:function	line:37
 logger	../ps2vcard.py	/^from transitions import Machine, logger  # noqa: F401$/;"	kind:namespace	line:24
@@ -98,30 +98,30 @@ os	../tests/test_ps2amc.py	/^import os.path$/;"	kind:namespace	line:4
 os	../tests/test_ps2vcard.py	/^import os.path$/;"	kind:namespace	line:5
 os	../tests/test_vcard_photo.py	/^import os$/;"	kind:namespace	line:3
 os	../tests/test_vcard_photo.py	/^import os.path$/;"	kind:namespace	line:4
-parse	../ps2vcard.py	/^    def parse(self, file):$/;"	kind:member	line:365
-parse	../ps2vcard.py	/^    def parse(self, infile):$/;"	kind:member	line:79
-parse	../ps2vcard.py	/^    def parse(self, input_file):$/;"	kind:member	line:522
-parse	../ps2vcard.py	/^    def parse(self, input_path):$/;"	kind:member	line:429
+parse	../ps2vcard.py	/^    def parse(self, file):$/;"	kind:member	line:363
+parse	../ps2vcard.py	/^    def parse(self, infile):$/;"	kind:member	line:77
+parse	../ps2vcard.py	/^    def parse(self, input_file):$/;"	kind:member	line:520
+parse	../ps2vcard.py	/^    def parse(self, input_path):$/;"	kind:member	line:427
 path	../tests/test_ps2amc.py	/^import os.path$/;"	kind:namespace	line:4
 path	../tests/test_ps2vcard.py	/^import os.path$/;"	kind:namespace	line:5
 path	../tests/test_vcard_photo.py	/^import os.path$/;"	kind:namespace	line:4
-photo_key	../ps2vcard.py	/^    photo_key = 'win0divEMPL_PHOTO_EMPLOYEE_PHOTO'$/;"	kind:variable	line:119
+photo_key	../ps2vcard.py	/^    photo_key = 'win0divEMPL_PHOTO_EMPLOYEE_PHOTO'$/;"	kind:variable	line:117
 ps2vcard.py	../ps2vcard.py	1;"	kind:file	line:1
 py_modules	../setup.py	/^    py_modules=['ps2vcard'],$/;"	kind:variable	line:8
 re	../ps2vcard.py	/^import re$/;"	kind:namespace	line:19
 request	../tests/test_vcard_photo.py	/^import urllib.request$/;"	kind:namespace	line:6
-reset_buffers	../ps2vcard.py	/^    def reset_buffers(self):$/;"	kind:member	line:358
+reset_buffers	../ps2vcard.py	/^    def reset_buffers(self):$/;"	kind:member	line:356
 setUp	../tests/test_ps2amc.py	/^    def setUp(self):$/;"	kind:member	line:13
 setUp	../tests/test_ps2vcard.py	/^    def setUp(self):$/;"	kind:member	line:55
 setUp	../tests/test_vcard_photo.py	/^    def setUp(self):$/;"	kind:member	line:13
-set_loglevel	../ps2vcard.py	/^def set_loglevel(context, parameter, value):$/;"	kind:function	line:831
+set_loglevel	../ps2vcard.py	/^def set_loglevel(context, parameter, value):$/;"	kind:function	line:829
 setup	../setup.py	/^from setuptools import setup$/;"	kind:namespace	line:1
 setup.py	../setup.py	1;"	kind:file	line:1
-store_key	../ps2vcard.py	/^    def store_key(self, tag, attr):$/;"	kind:member	line:263
-student_keys_dict	../ps2vcard.py	/^    student_keys_dict = {$/;"	kind:variable	line:101
-student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(self, student, course):$/;"	kind:member	line:382
-student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(self, student, course=None):$/;"	kind:member	line:445
-student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(student, course):$/;"	kind:member	line:492
+store_key	../ps2vcard.py	/^    def store_key(self, tag, attr):$/;"	kind:member	line:261
+student_keys_dict	../ps2vcard.py	/^    student_keys_dict = {$/;"	kind:variable	line:99
+student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(self, student, course):$/;"	kind:member	line:380
+student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(self, student, course=None):$/;"	kind:member	line:443
+student_to_vcard	../ps2vcard.py	/^    def student_to_vcard(student, course):$/;"	kind:member	line:490
 sys	../ps2vcard.py	/^import sys$/;"	kind:namespace	line:20
 test_add_photo_serialize_27	../tests/test_vcard_photo.py	/^    def test_add_photo_serialize_27(self):$/;"	kind:member	line:33
 test_ps2amc	../tests/test_ps2amc.py	/^    def test_ps2amc(self):$/;"	kind:member	line:69
@@ -134,8 +134,8 @@ test_vcard_photo.py	../tests/test_vcard_photo.py	1;"	kind:file	line:1
 unittest	../tests/test_ps2amc.py	/^import unittest$/;"	kind:namespace	line:6
 unittest	../tests/test_ps2vcard.py	/^import unittest$/;"	kind:namespace	line:9
 unittest	../tests/test_vcard_photo.py	/^import unittest$/;"	kind:namespace	line:5
-unpack_course_description	../ps2vcard.py	/^    def unpack_course_description(self):$/;"	kind:member	line:344
-unpack_element	../ps2vcard.py	/^    def unpack_element(self, tag, attr):$/;"	kind:member	line:250
+unpack_course_description	../ps2vcard.py	/^    def unpack_course_description(self):$/;"	kind:member	line:342
+unpack_element	../ps2vcard.py	/^    def unpack_element(self, tag, attr):$/;"	kind:member	line:248
 unpack_progplan	../ps2vcard.py	/^def unpack_progplan(progplan):$/;"	kind:function	line:46
 urllib	../tests/test_vcard_photo.py	/^import urllib.request$/;"	kind:namespace	line:6
 version	../setup.py	/^    version='0.1',$/;"	kind:variable	line:7
@@ -144,6 +144,6 @@ vobject	../tests/test_vcard_photo.py	/^import vobject$/;"	kind:namespace	line:8
 wrapper	../ps2vcard.py	/^    def wrapper(*args, **kwds):$/;"	kind:function	line:31
 wrapper	../ps2vcard.py	/^    def wrapper(*args, **kwds):$/;"	kind:function	line:39
 wraps	../ps2vcard.py	/^from functools import wraps$/;"	kind:namespace	line:14
-write	../ps2vcard.py	/^    def write(self, card, filename=None):$/;"	kind:member	line:548
-write	../ps2vcard.py	/^    def write(self, students):$/;"	kind:member	line:588
-write	../ps2vcard.py	/^    def write(self, students):$/;"	kind:member	line:628
+write	../ps2vcard.py	/^    def write(self, card, filename=None):$/;"	kind:member	line:546
+write	../ps2vcard.py	/^    def write(self, students):$/;"	kind:member	line:586
+write	../ps2vcard.py	/^    def write(self, students):$/;"	kind:member	line:626
