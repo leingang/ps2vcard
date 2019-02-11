@@ -782,7 +782,7 @@ def convert_to_anki(infile, verbose, debug, save_dir):
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('convert_to_anki')
-    parser = AlbertRosterFramesetParser()
+    parser = AlbertRosterHtmlParser()
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
     (course, students) = parser.parse(infile)
