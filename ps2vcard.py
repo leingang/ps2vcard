@@ -448,19 +448,22 @@ class AlbertRosterXlsParser(object):
 
     @log_begin
     @log_end
+    @add_logger
     def parse(self, input_path):
         with open(input_path) as f:
             html = f.read()
         cards = []
         bs = BeautifulSoup(html, 'lxml')
         headers = [e.contents[0] for e in bs.find_all('th')]
-        # logger.info('headers: %s',repr(headers))
+        logger.info('headers: %s',repr(headers))
         for row in bs('tr'):
             cells = row.find_all('td')
             if cells == []:
                 continue
-            cell_contents = [''.join(cell.contents) for cell in cells]
+            cell_contents = [''.join(filter( lambda x: str(x)==x, cell.contents)) 
+                             for cell in cells] # needs to be a list of strings
             student = dict(zip(headers, cell_contents))
+            logger.info('student: %s', repr(student))
             cards.append(self.student_to_vcard(student))
         return None, cards
 
