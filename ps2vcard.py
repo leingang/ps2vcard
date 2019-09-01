@@ -72,7 +72,7 @@ def unpack_progplan(progplan):
     >>> unpack_progplan("UA-Coll of Arts & Sci - \n\nUndecided")
     ['UA-Coll of Arts & Sci','Undecided']
     """
-    return progplan.split(' - \n\n')
+    return re.split(' - \n+', progplan)
 
 
 class AlbertRosterFramesetParser(HTMLParser):
