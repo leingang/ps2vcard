@@ -21,7 +21,7 @@ import sys
 
 from bs4 import BeautifulSoup
 import click
-from transitions import Machine, logger  # noqa: F401
+from transitions import Machine
 from transitions.core import MachineError
 import vobject
 
