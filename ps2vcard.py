@@ -27,6 +27,7 @@ import vobject
 
 
 def log_begin(f):
+    """Log the beginning of a function call"""
     @wraps(f)
     def wrapper(*args, **kwds):
         logging.getLogger(f.__name__).info("begin")
@@ -35,6 +36,7 @@ def log_begin(f):
 
 
 def log_end(f):
+    """Log the end of a function call"""
     @wraps(f)
     def wrapper(*args, **kwds):
         res = f(*args, **kwds)
@@ -42,6 +44,27 @@ def log_end(f):
         return res
     return wrapper
 
+def add_logger(f):
+    """Expose a logger object named 'logger'"""
+    # a bit of sorcery; see https://stackoverflow.com/a/17862336/297797
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        logger = logging.getLogger(f.__name__)
+        g = f.__globals__ 
+        sentinel = object()
+
+        oldvalue = g.get('logger', sentinel)
+        g['logger'] = logger
+
+        try:
+            res = f(*args, **kwds)
+        finally:
+            if oldvalue is sentinel:
+                del g['logger']
+            else:
+                g['logger'] = oldvalue
+        return res
+    return wrapper
 
 def unpack_progplan(progplan):
     """unpack a `progplan` string into program and plan.
