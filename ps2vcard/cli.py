@@ -21,50 +21,13 @@ import sys
 
 from bs4 import BeautifulSoup
 import click
+from logdecorator import log_on_start, log_on_end
 from transitions import Machine
 from transitions.core import MachineError
 import vobject
 
 
-def log_begin(f):
-    """Log the beginning of a function call"""
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        logging.getLogger(f.__name__).info("begin")
-        return f(*args, **kwds)
-    return wrapper
 
-
-def log_end(f):
-    """Log the end of a function call"""
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        res = f(*args, **kwds)
-        logging.getLogger(f.__name__).info("end")
-        return res
-    return wrapper
-
-def add_logger(f):
-    """Expose a logger object named 'logger'"""
-    # a bit of sorcery; see https://stackoverflow.com/a/17862336/297797
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        logger = logging.getLogger(f.__name__)
-        g = f.__globals__ 
-        sentinel = object()
-
-        oldvalue = g.get('logger', sentinel)
-        g['logger'] = logger
-
-        try:
-            res = f(*args, **kwds)
-        finally:
-            if oldvalue is sentinel:
-                del g['logger']
-            else:
-                g['logger'] = oldvalue
-        return res
-    return wrapper
 
 def unpack_progplan(progplan):
     """unpack a `progplan` string into program and plan.
@@ -82,13 +45,13 @@ class AlbertRosterFramesetParser(HTMLParser):
         self.roster_frame = None
 
     def handle_starttag(self, tag, attrs):
-        log = logging.getLogger("AlbertRosterFramesetParser.starttag")
-        log.debug("tag: %s" % tag)
-        log.debug("attrs: %s" % attrs)
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.debug("tag: %s" % tag)
+        logger.debug("attrs: %s" % attrs)
         if self.roster_frame:
             return
         attr_dict = dict(attrs)
-        log.debug("attr_dict: %s" % attr_dict)
+        logger.debug("attr_dict: %s" % attr_dict)
         if ((tag == 'frame' or tag == 'iframe') and
                 'name' in attr_dict and
                 attr_dict['name'] == 'TargetContent'):
@@ -108,8 +71,8 @@ class AlbertRosterFramesetParser(HTMLParser):
         of course (i.e., section) properties, and `students` is a list of
         vCards.
         """
-        log = logging.getLogger("AlbertRosterFramesetParser.parse")
-        log.debug('file: %s', infile)
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.debug('file: %s', infile)
         self.base_dir = os.path.dirname(infile)
         with open(infile, 'r') as f:
             data = f.read()
@@ -285,7 +248,8 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
         self.albert_key = self.attr_value
 
     def handle_course_key(self, tag, attr):
-        logging.debug("parsing id %s" % self.attr_value)
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.debug("parsing id %s" % self.attr_value)
         self.current_key = self.course_keys_dict[self.attr_value]
 
     def attr_is_student_key(self, tag, attr):
@@ -446,10 +410,10 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
 class AlbertRosterXlsParser(object):
     """Class to parse the `ps.xls` file downloaded from Albert"""
 
-    @log_begin
-    @log_end
-    @add_logger
+    @log_on_start(logging.DEBUG,"begin")
+    @log_on_end(logging.DEBUG,"end")
     def parse(self, input_path):
+        logger = logging.getLogger(self.__class__.__name__)
         with open(input_path) as f:
             html = f.read()
         cards = []
@@ -472,6 +436,7 @@ class AlbertRosterXlsParser(object):
         # This seems pretty similar to AlbertRosterHtmlParser.student_to_vcard,
         # with some dict keys changed.
         # Maybe refactor?
+        logger = logging.getLogger(self.__class__.__name__)
         if course is None:
             course = {}
         course['org'] = 'New York University'
@@ -734,8 +699,8 @@ def convert_all(infile, verbose, debug, save, pprint):
               help='pretty-print vCards to standard output')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='Access Class Rosters.html')
-@log_begin
-@log_end
+@log_on_start(logging.DEBUG,"begin")
+@log_on_end(logging.DEBUG,"end")
 def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     """Process a roster downloaded from Albert and generate vCards
 
@@ -763,13 +728,13 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
-    log = logging.getLogger('convert_all_from_frameset')
+    logger = logging.getLogger('convert_all_from_frameset')
     parser = AlbertRosterFramesetParser()
     (course, students) = parser.parse(infile)
     # logging.debug('students: %s',repr(students))
     # course info
-    log.debug('course: %s', repr(course))
-    log.debug('students: %s', repr(students))
+    logger.debug('course: %s', repr(course))
+    logger.debug('students: %s', repr(students))
     writer = VcardWriter(dirname=save_dir)
     for card in students:
         if pprint:
@@ -832,8 +797,8 @@ def convert_to_anki(infile, verbose, debug, save_dir):
               )
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
-@log_begin
-@log_end
+@log_on_start(logging.DEBUG,"begin")
+@log_on_end(logging.DEBUG,"end")
 def convert_to_amccsv(infile, verbose, debug, outfile):
     """Process a CSV roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
@@ -868,8 +833,8 @@ def set_loglevel(context, parameter, value):
               metavar='FILE', help='write to FILE (default: stdout)')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
-@log_begin
-@log_end
+@log_on_start(logging.DEBUG,"begin")
+@log_on_end(logging.DEBUG,"end")
 def convert_xls_to_amccsv(infile, loglevel, outfile):
     """Process an XLS roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
