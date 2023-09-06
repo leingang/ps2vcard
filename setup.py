@@ -7,6 +7,7 @@ setup(
     version='0.1',
     py_modules=['ps2vcard'],
     install_requires=['Click', 'vobject', 'transitions','bs4','lxml'],
+    tests_require=['pytest','jinja2'],
     entry_points="""
         [console_scripts]
         ps2vcard=ps2vcard.cli:convert_all
