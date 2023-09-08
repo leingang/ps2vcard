@@ -27,6 +27,16 @@ from transitions.core import MachineError
 import vobject
 
 
+FORMAT = "%(levelname)s:%(name)s#%(lineno)d|%(funcName)s: %(message)s"
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger()
+
+
+def _set_loglevel(*args):
+    "Callback for a Click Option to set the logging level"
+    (_, _, value) = args
+    if value is not None:
+        logging.getLogger().setLevel(value)
 
 
 def unpack_progplan(progplan):
@@ -45,7 +55,6 @@ class AlbertRosterFramesetParser(HTMLParser):
         self.roster_frame = None
 
     def handle_starttag(self, tag, attrs):
-        logger = logging.getLogger(self.__class__.__name__)
         logger.debug("tag: %s" % tag)
         logger.debug("attrs: %s" % attrs)
         if self.roster_frame:
@@ -71,7 +80,6 @@ class AlbertRosterFramesetParser(HTMLParser):
         of course (i.e., section) properties, and `students` is a list of
         vCards.
         """
-        logger = logging.getLogger(self.__class__.__name__)
         logger.debug('file: %s', infile)
         self.base_dir = os.path.dirname(infile)
         with open(infile, 'r') as f:
@@ -248,7 +256,6 @@ class AlbertRosterHtmlParser(HTMLParser, Machine):
         self.albert_key = self.attr_value
 
     def handle_course_key(self, tag, attr):
-        logger = logging.getLogger(self.__class__.__name__)
         logger.debug("parsing id %s" % self.attr_value)
         self.current_key = self.course_keys_dict[self.attr_value]
 
@@ -413,7 +420,6 @@ class AlbertRosterXlsParser(object):
     @log_on_start(logging.DEBUG,"begin")
     @log_on_end(logging.DEBUG,"end")
     def parse(self, input_path):
-        logger = logging.getLogger(self.__class__.__name__)
         with open(input_path) as f:
             html = f.read()
         cards = []
@@ -436,7 +442,6 @@ class AlbertRosterXlsParser(object):
         # This seems pretty similar to AlbertRosterHtmlParser.student_to_vcard,
         # with some dict keys changed.
         # Maybe refactor?
-        logger = logging.getLogger(self.__class__.__name__)
         if course is None:
             course = {}
         course['org'] = 'New York University'
@@ -635,17 +640,44 @@ class VcardAmcCsvWriter(csv.DictWriter):
             self.writerow(row)
 
 
+def set_loglevel(context, parameter, value):
+    click.echo(f"{value=}")
+    if value is None:
+        value = logging.WARNING
+    click.echo(f"Setting log level to {value}")
+    logger.setLevel(value)
+
+
 # Here begin the scripts
 @click.command()
-@click.option('--verbose', is_flag=True, default=False, help='be verbose')
-@click.option('--debug', is_flag=True, default=False,
-              help='show debugging statements')
+@click.option(
+    "-d",
+    "--debug",
+    help="Show debugging statements",
+    is_flag=True,
+    flag_value=logging.DEBUG,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
+@click.option(
+    "-v",
+    "--verbose",
+    help="Be verbose",
+    is_flag=True,
+    flag_value=logging.INFO,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
 @click.option('--save', is_flag=True, default=False, help='save vCards')
 @click.option('--print/--no-print', 'pprint', default=True,
               help='pretty-print vCards')
 @click.argument('infile', metavar='FILE',
                 default='Access Class Rosters.html')
-def convert_all(infile, verbose, debug, save, pprint):
+@log_on_start(logging.DEBUG, "{callable.__name__:s} begin")
+@log_on_end(logging.DEBUG, "{callable.__name__:s} end")
+def convert_all(infile, save, pprint):
     """
     Process a roster downloaded from Albert and generate vCards
 
@@ -672,13 +704,10 @@ def convert_all(infile, verbose, debug, save, pprint):
     Then you can import the cards into your address book.
 
     """
-    loglevel = logging.DEBUG if debug else (
-        logging.INFO if verbose else logging.WARNING)
-    logging.basicConfig(level=loglevel)
     parser = AlbertRosterHtmlParser()
     (course, students) = parser.parse(infile)
-    logging.debug('course: %s', repr(course))
-    logging.debug('students: %s', repr(students))
+    logger.debug('course: %s', repr(course))
+    logger.debug('students: %s', repr(students))
     writer = VcardWriter(dirname=os.getcwd())
     for card in students:
         if pprint:
@@ -688,9 +717,26 @@ def convert_all(infile, verbose, debug, save, pprint):
 
 
 @click.command()
-@click.option('--verbose', is_flag=True, default=False, help='be verbose')
-@click.option('--debug', is_flag=True, default=False,
-              help='show debugging statements')
+@click.option(
+    "-d",
+    "--debug",
+    help="Show debugging statements",
+    is_flag=True,
+    flag_value=logging.DEBUG,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
+@click.option(
+    "-v",
+    "--verbose",
+    help="Be verbose",
+    is_flag=True,
+    flag_value=logging.INFO,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
 @click.option('--save', is_flag=True, default=False, help='save vCards')
 @click.option('--save-dir', 'save_dir', type=click.Path(), default=os.getcwd(),
               help='save vCards to this directory ' +
@@ -699,8 +745,8 @@ def convert_all(infile, verbose, debug, save, pprint):
               help='pretty-print vCards to standard output')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='Access Class Rosters.html')
-@log_on_start(logging.DEBUG,"begin")
-@log_on_end(logging.DEBUG,"end")
+@log_on_start(logging.DEBUG, "{callable.__name__:s} begin")
+@log_on_end(logging.DEBUG, "{callable.__name__:s} end")
 def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     """Process a roster downloaded from Albert and generate vCards
 
@@ -728,7 +774,6 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
     logging.basicConfig(level=loglevel)
-    logger = logging.getLogger('convert_all_from_frameset')
     parser = AlbertRosterFramesetParser()
     (course, students) = parser.parse(infile)
     # logging.debug('students: %s',repr(students))
@@ -744,14 +789,33 @@ def convert_all_from_frameset(infile, verbose, debug, save, save_dir, pprint):
 
 
 @click.command()
-@click.option('--verbose', is_flag=True, default=False, help='be verbose')
-@click.option('--debug', is_flag=True, default=False,
-              help='show debugging statements')
+@click.option(
+    "-d",
+    "--debug",
+    help="Show debugging statements",
+    is_flag=True,
+    flag_value=logging.DEBUG,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
+@click.option(
+    "-v",
+    "--verbose",
+    help="Be verbose",
+    is_flag=True,
+    flag_value=logging.INFO,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
 @click.option('--save-dir', 'save_dir', type=click.Path(), default=os.getcwd(),
               help='save images to this directory ' +
                    '(default: current directory)')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='Access Class Rosters.html')
+@log_on_start(logging.DEBUG, "{callable.__name__:s} begin")
+@log_on_end(logging.DEBUG, "{callable.__name__:s} end")
 def convert_to_anki(infile, verbose, debug, save_dir):
     """Process a roster downloaded from Albert and generate a set
     of image files with student names.  These files can be imported to Anki
@@ -789,16 +853,33 @@ def convert_to_anki(infile, verbose, debug, save_dir):
 
 
 @click.command()
-@click.option('--verbose', is_flag=True, default=False, help='be verbose')
-@click.option('--debug', is_flag=True, default=False,
-              help='show debugging statements')
+@click.option(
+    "-d",
+    "--debug",
+    help="Show debugging statements",
+    is_flag=True,
+    flag_value=logging.DEBUG,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
+@click.option(
+    "-v",
+    "--verbose",
+    help="Be verbose",
+    is_flag=True,
+    flag_value=logging.INFO,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
 @click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout,
               metavar='FILE', help='write to FILE (default: stdout)'
               )
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
-@log_on_start(logging.DEBUG,"begin")
-@log_on_end(logging.DEBUG,"end")
+@log_on_start(logging.DEBUG, "{callable.__name__:s} begin")
+@log_on_end(logging.DEBUG, "{callable.__name__:s} end")
 def convert_to_amccsv(infile, verbose, debug, outfile):
     """Process a CSV roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
@@ -810,31 +891,40 @@ def convert_to_amccsv(infile, verbose, debug, outfile):
     """
     loglevel = logging.DEBUG if debug else (
         logging.INFO if verbose else logging.WARNING)
-    logging.basicConfig(level=loglevel)
+    logger.setLevel(loglevel)
     with open(infile) as f:
         students = csv.DictReader(f)
         writer = AmcCsvWriter(outfile)
         writer.write(students)
 
 
-def set_loglevel(context, parameter, value):
-    if value is None:
-        value = logging.WARNING
-    logging.basicConfig(level=value)
-
-
 @click.command()
-@click.option('--verbose', 'loglevel', flag_value=logging.INFO,
-              help='be verbose')
-@click.option('--debug', 'loglevel', flag_value=logging.DEBUG,
-              callback=set_loglevel,
-              help='show debugging statements')
+@click.option(
+    "-d",
+    "--debug",
+    help="Show debugging statements",
+    is_flag=True,
+    flag_value=logging.DEBUG,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
+@click.option(
+    "-v",
+    "--verbose",
+    help="Be verbose",
+    is_flag=True,
+    flag_value=logging.INFO,
+    default=None,
+    expose_value=False,
+    callback=_set_loglevel,
+)
 @click.option('--output', 'outfile', type=click.File('wb'), default=sys.stdout,
               metavar='FILE', help='write to FILE (default: stdout)')
 @click.argument('infile', metavar='FILE', type=click.Path(exists=True),
                 default='ps.csv')
-@log_on_start(logging.DEBUG,"begin")
-@log_on_end(logging.DEBUG,"end")
+@log_on_start(logging.DEBUG, "{callable.__name__:s} begin")
+@log_on_end(logging.DEBUG, "{callable.__name__:s} end")
 def convert_xls_to_amccsv(infile, loglevel, outfile):
     """Process an XLS roster downloaded from Albert and generate a CSV file
     suitable for importing to auto-multiple-choice.
